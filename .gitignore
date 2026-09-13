@@ -2,3 +2,14 @@
 __pycache__/
 .pytest_cache/
 .env
+.venv-pangu/
+fusion_result.json
+op_test_result.json
+logs/
+kernel_meta/
+eval/runs/
+*.log
+# 原始数据集不进 git：单个文件最大 202MB（SLAKE/imgs.zip），超过 GitHub 100MB 上限；
+# 需要重建时用 正式测评集/_build/download.py 重新拉取
+正式测评集/_raw/
+测试评测集/_raw/

@@ -1,0 +1,17 @@
+# openPangu-R-7B-2512 推理环境（昇腾 910B2C / CANN 8.3.RC1 / Python 3.11）
+# torch 必须装 +cpu 版本（torch-npu 2.7.1 依赖 torch==2.7.1+cpu）
+# 安装方式见 setup/restore.sh，不要直接 pip install -r 本文件（torch 走专用镜像）
+torch==2.7.1+cpu
+torch-npu==2.7.1
+transformers==4.53.2
+sentencepiece
+einops
+# 以下几个是 CANN 算子编译/执行时用到的 Python 依赖
+decorator
+attrs
+psutil
+scipy
+cffi
+protobuf
+absl-py
+wheel

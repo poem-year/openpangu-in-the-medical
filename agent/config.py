@@ -9,7 +9,7 @@ from pathlib import Path
 
 @dataclass
 class Config:
-    """智能体运行配置（默认值与《智能体设计方案.md》§5.3 一致）。"""
+    """智能体运行配置（默认值见《环境说明.md》§六）。"""
 
     openai_base_url: str = "http://localhost:8000/v1"
     openai_api_key: str = "not-needed"

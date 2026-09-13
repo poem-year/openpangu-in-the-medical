@@ -3,7 +3,7 @@
 实现《智能体接口规范.md》§1：
     answer(question, history) -> AgentResult
 
-流程（《智能体设计方案.md》§2.2）：
+流程：
     前置安全扫描 → 组装消息 → create_agent 主循环 → 结构化产出 → 审查层 → AgentResult
 """
 

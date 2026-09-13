@@ -1,0 +1,241 @@
+{
+  "collected_at": "2026-09-13",
+  "seed": 20260913,
+  "total": 332,
+  "language": {
+    "zh": 294,
+    "en": 38
+  },
+  "dimensions": [
+    {
+      "file": "01_医学知识基础.jsonl",
+      "dimension_code": "D01",
+      "dimension": "医学知识基础",
+      "n_items": 40,
+      "n_translated": 35,
+      "task_types": [
+        "mcq_single"
+      ],
+      "language": {
+        "zh": 35,
+        "en": 5
+      },
+      "sources": [
+        "CMB（含 CMB-Exam / CMB-Clin）",
+        "CMExam",
+        "MMLU（医学相关子集）"
+      ]
+    },
+    {
+      "file": "02_病例诊断推理.jsonl",
+      "dimension_code": "D02",
+      "dimension": "病例诊断推理",
+      "n_items": 40,
+      "n_translated": 38,
+      "task_types": [
+        "mcq_single"
+      ],
+      "language": {
+        "zh": 38,
+        "en": 2
+      },
+      "sources": [
+        "CMExam",
+        "MedQA（USMLE，中英双版本）"
+      ]
+    },
+    {
+      "file": "03_鉴别诊断.jsonl",
+      "dimension_code": "D03",
+      "dimension": "鉴别诊断",
+      "n_items": 25,
+      "n_translated": 20,
+      "task_types": [
+        "mcq_single",
+        "open_ddx",
+        "open_ranked_ddx"
+      ],
+      "language": {
+        "zh": 20,
+        "en": 5
+      },
+      "sources": [
+        "CMB（含 CMB-Exam / CMB-Clin）",
+        "CMExam",
+        "MedQA（USMLE，中英双版本）",
+        "NEJM 临床病理讨论（Diagnostic Reasoning）"
+      ]
+    },
+    {
+      "file": "04_检查决策.jsonl",
+      "dimension_code": "D04",
+      "dimension": "检查决策",
+      "n_items": 22,
+      "n_translated": 22,
+      "task_types": [
+        "mcq_single",
+        "open_workup"
+      ],
+      "language": {
+        "zh": 22
+      },
+      "sources": [
+        "CMB（含 CMB-Exam / CMB-Clin）",
+        "CMExam",
+        "MedQA（USMLE，中英双版本）"
+      ]
+    },
+    {
+      "file": "05_诊断分析_开放题.jsonl",
+      "dimension_code": "D05",
+      "dimension": "病例诊断分析",
+      "n_items": 30,
+      "n_translated": 30,
+      "task_types": [
+        "open_diagnosis"
+      ],
+      "language": {
+        "zh": 30
+      },
+      "sources": [
+        "CMB（含 CMB-Exam / CMB-Clin）"
+      ]
+    },
+    {
+      "file": "06_多轮问诊诊断.jsonl",
+      "dimension_code": "D06",
+      "dimension": "多轮问诊诊断",
+      "n_items": 20,
+      "n_translated": 20,
+      "task_types": [
+        "dialogue_diagnosis"
+      ],
+      "language": {
+        "zh": 20
+      },
+      "sources": [
+        "PromptCBLUE（含 IMCS-V2 等子集）"
+      ]
+    },
+    {
+      "file": "07_主动问诊_智能体.jsonl",
+      "dimension_code": "D07",
+      "dimension": "主动问诊（智能体）",
+      "n_items": 15,
+      "n_translated": 12,
+      "task_types": [
+        "agentic_history_taking"
+      ],
+      "language": {
+        "zh": 12,
+        "en": 3
+      },
+      "sources": [
+        "AgentClinic（MedQA 场景版）"
+      ]
+    },
+    {
+      "file": "08_疑难病例_全流程.jsonl",
+      "dimension_code": "D08",
+      "dimension": "疑难病例全流程",
+      "n_items": 25,
+      "n_translated": 20,
+      "task_types": [
+        "mcq_single"
+      ],
+      "language": {
+        "zh": 20,
+        "en": 5
+      },
+      "sources": [
+        "MedXpertQA"
+      ]
+    },
+    {
+      "file": "09_安全与急症边界.jsonl",
+      "dimension_code": "D09",
+      "dimension": "安全与急症边界",
+      "n_items": 25,
+      "n_translated": 20,
+      "task_types": [
+        "rubric_scored"
+      ],
+      "language": {
+        "zh": 20,
+        "en": 5
+      },
+      "sources": [
+        "HealthBench"
+      ]
+    },
+    {
+      "file": "10_信息不足与不确定性.jsonl",
+      "dimension_code": "D10",
+      "dimension": "信息不足与不确定性",
+      "n_items": 20,
+      "n_translated": 16,
+      "task_types": [
+        "rubric_scored"
+      ],
+      "language": {
+        "zh": 16,
+        "en": 4
+      },
+      "sources": [
+        "HealthBench"
+      ]
+    },
+    {
+      "file": "11_医患沟通与解释.jsonl",
+      "dimension_code": "D11",
+      "dimension": "医患沟通与解释",
+      "n_items": 20,
+      "n_translated": 16,
+      "task_types": [
+        "rubric_scored"
+      ],
+      "language": {
+        "zh": 16,
+        "en": 4
+      },
+      "sources": [
+        "HealthBench"
+      ]
+    },
+    {
+      "file": "12_临床计算与工具.jsonl",
+      "dimension_code": "D12",
+      "dimension": "临床计算与工具",
+      "n_items": 25,
+      "n_translated": 20,
+      "task_types": [
+        "calculation"
+      ],
+      "language": {
+        "zh": 20,
+        "en": 5
+      },
+      "sources": [
+        "MedCalc-Bench"
+      ]
+    },
+    {
+      "file": "13_证据检索与溯源.jsonl",
+      "dimension_code": "D13",
+      "dimension": "证据检索与溯源",
+      "n_items": 25,
+      "n_translated": 20,
+      "task_types": [
+        "evidence_qa",
+        "retrieval"
+      ],
+      "language": {
+        "zh": 25
+      },
+      "sources": [
+        "CmedqaRetrieval（C-MTEB）",
+        "PubMedQA"
+      ]
+    }
+  ]
+}
