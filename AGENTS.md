@@ -33,7 +33,7 @@
 ## 四、工作约定
 
 1. 改代码前先看 `交接文档.md` 的「下一步」和「已知坑」。
-2. 动 `agent/` 或 `tests/` 之后必须 `python -m pytest -q` 全绿（当前 83 项），不绿不算完成。
+2. 动 `agent/` 或 `tests/` 之后必须 `.venv/bin/python -m pytest -q` 全绿（当前 83 项，服务器上实测 0.53 秒跑完），不绿不算完成。
 3. 动 `agent/prompts/` 下任何文件：先更新 `agent/prompts/CHANGELOG.md`，再跑 `tests/test_scenarios_fake_model.py` 回归。
 4. 改接口先改 `智能体接口规范.md`，按其中 §6 记录变更。
 5. 与用户对话、写文档、写注释一律用中文；文档风格照 `项目综述.md`：短句、表格、少形容词。
@@ -45,7 +45,7 @@
 - 昇腾 910B2C 单卡，64GB 显存，`npu-smi info` 看状态
 - openEuler 24.03 LTS-SP2，CANN 9.0.0，Python 3.11.15
 - 工作目录 `/data/openpangu`，大文件一律放 `/data`（系统盘只有 30G）
-- 跑测试：`cd /data/openpangu && python -m pytest -q`
+- 跑测试：`cd /data/openpangu && .venv/bin/python -m pytest -q`（Python 环境已建好）
 - 本机 Codex 接的是 DeepSeek：`model = "deepseek-flash"`，跑 `codex` 即用
 
 ## 六、不要做的事
