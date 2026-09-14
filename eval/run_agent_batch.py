@@ -46,6 +46,7 @@ from eval_lib import DATASET_DIR, PROMPT_VERSION, build_prompt  # noqa: E402
 from run_eval import GENERATION_PROTOCOL as EVAL_GENERATION_PROTOCOL  # noqa: E402
 from run_eval import config_fingerprint, pick_items  # noqa: E402
 from scripts.pangu_tool_bridge import FORCE_FINALIZE_NOTE, REQUIRE_TOOL_NOTE  # noqa: E402
+from progress import write_progress  # noqa: E402
 
 GENERATION_PROTOCOL = "agent-batch-v1"
 DEFAULT_BATCH_ENDPOINT = "http://127.0.0.1:8000/v1/batch/chat"
@@ -118,6 +119,7 @@ def tool_specs() -> list[dict]:
 
 
 def call_batch(endpoint: str, requests: list[dict], timeout: float = 900.0) -> list[dict]:
+    """一次 POST /v1/batch/chat。"""
     payload = json.dumps({"requests": requests}, ensure_ascii=False).encode("utf-8")
     request = urllib.request.Request(
         endpoint, data=payload, headers={"Content-Type": "application/json"}, method="POST"
@@ -219,6 +221,7 @@ def main() -> int:
     started = time.time()
     written = 0
     round_stats: list[dict] = []
+    recent_rows: list[dict] = []
     with open(pred_path, "a", encoding="utf-8") as fh:
         for start in range(0, len(pending), args.batch_size):
             chunk = pending[start:start + args.batch_size]
@@ -349,13 +352,30 @@ def main() -> int:
                     **record,
                 }, ensure_ascii=False) + "\n")
                 written += 1
+                recent_rows.append({"id": item["id"], "task": item["task_type"],
+                                    "verdict": record.get("handled_as", ""),
+                                    "score": None,
+                                    "note": str(record.get("content", "")).replace("\n", " ")[:40]})
             fh.flush()
             rate = (time.time() - started) / max(written, 1)
             detail = "、".join(f"{s['round']}×{s['n']}={s['seconds']}s"
                                for s in round_stats[-(len(round_stats)):])
             print(f"[agentb] {written}/{len(pending)} ｜ 本批 {time.time() - t0:.0f}s ｜ "
                   f"平均 {rate:.1f}s/题 ｜ 预计剩余 {rate * (len(pending) - written) / 60:.0f} 分钟\n"
-                  f"         各轮耗时：{detail}", flush=True)
+              f"         各轮耗时：{detail}", flush=True)
+            # 写给看板（watch.sh 读 progress.json）
+            write_progress(
+                run_dir, run_id=args.run_id, stage="generate" if written < len(pending) else "done",
+                started_at=started,
+                generate={"done": written, "total": len(pending),
+                          "batch": written, "batches": len(pending),
+                          "tps": round(written / max(time.time() - started, 1e-6), 2), "eta": None,
+                          "batch_type": "agent-batch", "batch_size": args.batch_size,
+                          "batch_tokens": 0, "batch_budget": 0,
+                          "batch_elapsed": round(time.time() - t0, 1)},
+                by_dimension={}, recent=recent_rows[-8:],
+                judge_open={"done": 0, "total": 0}, judge_rubric={"done": 0, "total": 0},
+            )
 
     print(f"[agentb] 完成 {written} 题 → {pred_path}")
     return 0

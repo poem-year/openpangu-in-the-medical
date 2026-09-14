@@ -41,6 +41,9 @@ OPENAI_BASE_URL=http://127.0.0.1:8000/v1 MODEL_NAME=openpangu-7b .venv/bin/pytho
 
 ## 目录导航
 
+> 跑测评的三条命令、每个脚本是干什么的，见 [`脚本地图.md`](脚本地图.md)。
+> 正在跑的实验：`bash eval/scripts/watch.sh --all`；结果登记在 [`评测报告/INDEX.md`](评测报告/INDEX.md)。
+
 | 路径 | 内容 |
 | --- | --- |
 | `agent/` | B 线：LangGraph 智能体、工具、双层审查、提示词 |
@@ -53,6 +56,9 @@ OPENAI_BASE_URL=http://127.0.0.1:8000/v1 MODEL_NAME=openpangu-7b .venv/bin/pytho
 | `评测报告/` | 历次评测的报告快照（每轮 `summary.md` / `report.html` / `skipped.jsonl`）+ 收集脚本 |
 | `工作留痕.md` | 每轮工作的简短记录：做了什么、怎么验的、留了什么、下一步 |
 | `智能体测评方案.md` | 智能体评测怎么做才「快而准」：批处理提速、三层指标、消融矩阵、D07 模拟患者 |
+| `评测框架.md` | 长期测评框架：目录约定、不覆盖保证、怎么加实验 |
+| `脚本地图.md` | 全项目脚本一览：正式入口 / 内部实现 / 历史遗留 |
+| `legacy/` | 已被取代的脚本（run_eval.sh / watch.sh / watch_all.sh / stop_eval.sh） |
 | `scripts/` | 模型侧：环境变量、推理入口、OpenAI 兼容服务与启停脚本 |
 | `setup/` | **换服务器时用这个**：环境恢复脚本与说明 |
 | `tests/` | 离线测试（228 项，不需要模型和网络） |

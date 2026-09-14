@@ -7,7 +7,7 @@
 # Ctrl-C 只退出看板，不影响后台评测。
 
 set -uo pipefail
-cd "$(dirname "$0")" || exit 1
+cd "$(dirname "$0")/.." || exit 1
 PY=.venv-pangu/bin/python
 INTERVAL="${WATCH_INTERVAL:-3}"
 
