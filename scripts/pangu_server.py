@@ -168,6 +168,125 @@ def generate_finalize_round(
     return payload, out
 
 
+def build_batch_conversation(model: PanguModel, request: dict) -> tuple[list[dict], int]:
+    """把一条批量请求转成 (模型消息列表, 输出预算)。
+
+    三种 kind：
+    - `tool`：工具轮，把业务工具渲染进系统提示，要求模型输出 TOOL/ARGS 或直接作答；
+      `notes` 可追加强制说明（如首轮没调工具时的补偿提示）。
+    - `finalize`：收口轮，把对话渲染成 transcript 后要一个 AgentTurnOutput JSON。
+    - `text`：直接给 system + user 的文本轮（服务端不需要解析结构）。
+    """
+    kind = str(request.get("kind") or "tool")
+    messages = request.get("messages") or []
+    max_tokens = int(request.get("max_tokens") or 0)
+
+    if kind == "tool":
+        business_tools = [tool for tool in (request.get("tools") or []) if tool]
+        system_prompt = build_tool_system_prompt(
+            collect_system_text(messages), business_tools, list(request.get("notes") or [])
+        )
+        return [{"role": "system", "content": system_prompt}] + to_model_messages(messages), (
+            max_tokens or SETTINGS.tool_max_tokens
+        )
+
+    if kind == "finalize":
+        names = collect_tool_names(messages)
+        transcript = render_transcript(messages, tool_names_by_id=names)
+        system_prompt = build_finalize_system()
+        if request.get("retry_note"):
+            system_prompt = f"{system_prompt}\n\n{request['retry_note']}"
+        return [
+            {"role": "system", "content": system_prompt},
+            {"role": "user",
+             "content": build_finalize_user_prompt(transcript, request.get("draft_reply") or "")},
+        ], (max_tokens or SETTINGS.finalize_max_tokens)
+
+    if kind == "text":
+        conversation = []
+        if request.get("system"):
+            conversation.append({"role": "system", "content": str(request["system"])})
+        conversation.append({"role": "user", "content": str(request.get("user") or "")})
+        return conversation, (max_tokens or SETTINGS.finalize_max_tokens)
+
+    raise ValueError(f"不支持的 kind：{kind!r}（只能是 tool / finalize / text）")
+
+
+def handle_batch_chat(model: PanguModel, body: dict) -> dict:
+    """批处理端点：一次把**同一轮**的 N 道题打包并行解码。
+
+    请求体：`{"requests": [{"kind": "tool"|"finalize"|"text", ...}, ...]}`
+    响应体：`{"results": [...]}`，顺序与请求一致；每条含
+    `text`（原始输出）、`tool_call`（kind=tool 时解析出来的工具调用，可能为 null）、
+    `payload`（kind=finalize 时归一化后的 AgentTurnOutput 字典，可能为 null）、
+    `input_tokens` / `output_tokens`。
+
+    内部按 (输出预算, 快思考) 分组，每组一次 `chat_batch_messages`——
+    这是把智能体评测从 37 tok/s 提到几百 tok/s 的关键。
+    """
+    started = time.time()
+    requests = body.get("requests")
+    if not isinstance(requests, list) or not requests:
+        raise ValueError("requests 必须是非空数组")
+
+    prepared: list[dict] = []
+    for index, request in enumerate(requests):
+        if not isinstance(request, dict):
+            raise ValueError(f"requests[{index}] 必须是对象")
+        conversation, max_tokens = build_batch_conversation(model, request)
+        prepared.append({
+            "index": index,
+            "kind": str(request.get("kind") or "tool"),
+            "conversation": conversation,
+            "max_tokens": max_tokens,
+            "fast_thinking": bool(request.get("fast_thinking", True)),
+            "allowed_tools": [t for t in (request.get("allowed_tools") or []) if t],
+        })
+
+    results: list[dict | None] = [None] * len(prepared)
+    groups: dict[tuple[int, bool], list[dict]] = {}
+    for item in prepared:
+        groups.setdefault((item["max_tokens"], item["fast_thinking"]), []).append(item)
+
+    total_out = 0
+    for (max_tokens, fast_thinking), items in groups.items():
+        out = model.chat_batch_messages(
+            [item["conversation"] for item in items],
+            fast_thinking=fast_thinking,
+            max_new_tokens=max_tokens,
+        )
+        total_out += int(out["total_output_tokens"])
+        for item, res in zip(items, out["results"]):
+            text = res.get("content") or ""
+            record = {
+                "kind": item["kind"],
+                "text": text,
+                "thinking": res.get("thinking") or "",
+                "output_tokens": int(res.get("output_tokens") or 0),
+                "stop_reason": res.get("stop_reason", "natural"),
+                "tool_call": None,
+                "payload": None,
+            }
+            if item["kind"] == "tool":
+                parsed = parse_tool_call(text, allowed=item["allowed_tools"] or None)
+                if parsed is not None:
+                    record["tool_call"] = {"name": parsed.name, "arguments": parsed.arguments}
+            elif item["kind"] == "finalize":
+                record["payload"] = normalize_agent_output(
+                    parse_json_object(text) or {}, draft_reply=""
+                )
+            results[item["index"]] = record
+
+    elapsed = time.time() - started
+    return {
+        "results": results,
+        "groups": len(groups),
+        "elapsed_seconds": round(elapsed, 2),
+        "total_output_tokens": total_out,
+        "tokens_per_second": round(total_out / max(elapsed, 1e-6), 1),
+    }
+
+
 def handle_chat_completion(model: PanguModel, body: dict) -> dict:
     """一次 /v1/chat/completions 的全部编排。"""
     started = time.time()
@@ -384,7 +503,8 @@ class Handler(BaseHTTPRequestHandler):
             self._send_json(404, {"error": {"message": "not found", "type": "invalid_request_error"}})
 
     def do_POST(self) -> None:  # noqa: N802
-        if self.path.rstrip("/") not in ("/v1/chat/completions", "/chat/completions"):
+        path = self.path.rstrip("/")
+        if path not in ("/v1/chat/completions", "/chat/completions", "/v1/batch/chat", "/batch/chat"):
             self._send_json(404, {"error": {"message": "not found", "type": "invalid_request_error"}})
             return
         try:
@@ -397,7 +517,10 @@ class Handler(BaseHTTPRequestHandler):
             return
         try:
             with self.lock:
-                response = handle_chat_completion(self.model, body)
+                if path in ("/v1/batch/chat", "/batch/chat"):
+                    response = handle_batch_chat(self.model, body)
+                else:
+                    response = handle_chat_completion(self.model, body)
         except ValueError as exc:
             self._send_json(
                 400, {"error": {"message": str(exc), "type": "invalid_request_error"}}

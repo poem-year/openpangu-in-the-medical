@@ -305,6 +305,96 @@ class PanguModel:
                 tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
             )
 
+        return self._generate_texts(
+            texts,
+            fast_thinking=fast_thinking,
+            max_new_tokens=max_new_tokens,
+            do_sample=do_sample,
+            temperature=temperature,
+            top_p=top_p,
+            progress_cb=progress_cb,
+            think_budget=think_budget,
+            repeat_ngram=repeat_ngram,
+            repeat_window=repeat_window,
+        )
+
+    def chat_batch_messages(
+        self,
+        conversations: list[list[dict]],
+        *,
+        fast_thinking: bool = True,
+        max_new_tokens: int = 1024,
+        do_sample: bool = False,
+        temperature: float = 1.0,
+        top_p: float = 0.8,
+        progress_cb=None,
+        think_budget: int | None = None,
+        repeat_ngram: int = DEFAULT_REPEAT_NGRAM,
+        repeat_window: int = DEFAULT_REPEAT_WINDOW,
+    ) -> dict:
+        """批量跑多段**完整对话**（每段可含 system / user / assistant / tool 角色）。
+
+        与 `chat_batch` 的区别：那个只支持「system + 单条 user」，这里支持任意多轮消息。
+        服务端的批处理端点用它把「处于同一轮的 N 道题」凑成一批——工具轮与收口轮
+        因此都能从 37 tok/s 的单条解码变成几百 tok/s 的批解码。
+
+        快思考时在最后一条 user / tool 消息末尾补 `/no_think`，与 `chat_messages` 一致。
+        """
+        if not conversations:
+            return {"results": [], "elapsed_seconds": 0.0, "total_output_tokens": 0,
+                    "tokens_per_second": 0.0}
+        self.load()
+        tokenizer = self._tokenizer
+        texts: list[str] = []
+        for conversation in conversations:
+            payload = [dict(item) for item in conversation]
+            if fast_thinking:
+                for item in reversed(payload):
+                    if item.get("role") in ("user", "tool"):
+                        text = str(item.get("content") or "")
+                        if not text.rstrip().endswith("/no_think"):
+                            item["content"] = f"{text} /no_think"
+                        break
+            texts.append(
+                tokenizer.apply_chat_template(payload, tokenize=False, add_generation_prompt=True)
+            )
+        return self._generate_texts(
+            texts,
+            fast_thinking=fast_thinking,
+            max_new_tokens=max_new_tokens,
+            do_sample=do_sample,
+            temperature=temperature,
+            top_p=top_p,
+            progress_cb=progress_cb,
+            think_budget=think_budget,
+            repeat_ngram=repeat_ngram,
+            repeat_window=repeat_window,
+        )
+
+    def _generate_texts(
+        self,
+        texts: list[str],
+        *,
+        fast_thinking: bool,
+        max_new_tokens: int,
+        do_sample: bool,
+        temperature: float,
+        top_p: float,
+        progress_cb=None,
+        think_budget: int | None = None,
+        repeat_ngram: int = DEFAULT_REPEAT_NGRAM,
+        repeat_window: int = DEFAULT_REPEAT_WINDOW,
+    ) -> dict:
+        """批解码本体：左填充 + 并行解码 + 逐行停止（`chat_batch` 与 `chat_batch_messages` 共用）。"""
+        import torch
+        from transformers import LogitsProcessor, LogitsProcessorList
+
+        if not texts:
+            return {"results": [], "elapsed_seconds": 0.0, "total_output_tokens": 0,
+                    "tokens_per_second": 0.0}
+        self.load()
+        tokenizer = self._tokenizer
+
         # 生成必须左填充：从右侧续写，右侧不能有 pad
         original_side = tokenizer.padding_side
         tokenizer.padding_side = "left"
@@ -387,7 +477,7 @@ class PanguModel:
 
         results = []
         total_new = 0
-        for row_index, (row, question) in enumerate(zip(outputs, questions)):
+        for row_index, row in enumerate(outputs):
             new_tokens = row[prompt_len:]
             if EOS_TOKEN_ID in new_tokens.tolist():
                 stop_at = new_tokens.tolist().index(EOS_TOKEN_ID)
