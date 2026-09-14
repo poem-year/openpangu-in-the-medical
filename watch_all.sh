@@ -14,7 +14,7 @@ INTERVAL="${WATCH_INTERVAL:-3}"
 runs=("$@")
 if [[ ${#runs[@]} -eq 0 ]]; then
   # 自动盯正式轮次；冒烟轮次（smoke-*）不混进来看板
-  mapfile -t runs < <(for d in eval/runs/*-v3/; do
+  mapfile -t runs < <(for d in eval/runs/*-v*/ eval/runs/*-4x/; do
     name=$(basename "$d")
     [[ "$name" == smoke-* ]] && continue
     [[ -d "$d" ]] && echo "$name"

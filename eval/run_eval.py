@@ -107,11 +107,17 @@ def estimate(todo: list[dict], thinking: str, batch_size: int) -> dict:
 # （不给无限预算，是因为真正的问题不是「想得不够久」而是「会打转」——打转靠
 # scripts/pangu_infer.py 的 think_budget + 重复检测掐断，再用快思考补答一次）。
 RAG_BUDGET_BONUS = 768
-# 思考预算占输出预算的比例：慢思考最多用掉一半，剩下的留给回答。
-THINK_BUDGET_RATIO = 0.5
+# 思考预算占输出预算的比例。
+#
+# 默认 1.0＝**不额外设早停线**：思考时长由 max_new_tokens 硬约束，真正的「无限思考」
+# 由重复退化检测掐断。为什么不设小一点：实测（旧协议 L2 里 144 道自然答完的题）
+# 把上限设成「预算的一半」会误掐 44% 本来能正常答完的题，一半的题会被降级成快思考补答，
+# 分数反而下降。想更激进地限制思考时长，用 `--think-ratio 0.5`（脚本会记录该参数）。
+THINK_BUDGET_RATIO = 1.0
 THINK_BUDGET_MIN = 512
 # 生成协议版本：掐断规则或救援流程一改就必须升，否则旧结果会被当成同配置复用。
-GENERATION_PROTOCOL = "thinkcap-v1"
+# v2：收紧重复检测（只在思考块内判）、默认不再对思考时长设早停线
+GENERATION_PROTOCOL = "thinkcap-v2"
 
 
 def token_budget(task_type: str, thinking: str, layer: str | None = None) -> int:
@@ -124,11 +130,18 @@ def token_budget(task_type: str, thinking: str, layer: str | None = None) -> int
     return max(640, int(base * 0.6))
 
 
-def think_budget_for(max_new_tokens: int, thinking: str) -> int | None:
-    """慢思考允许多少 token 花在思考块里；快思考没有思考块，返回 None。"""
+def think_budget_for(max_new_tokens: int, thinking: str, ratio: float = THINK_BUDGET_RATIO) -> int | None:
+    """慢思考允许多少 token 花在思考块里；不需要早停线时返回 None。
+
+    ratio ≥ 1 表示不额外设早停线（思考时长交给 max_new_tokens 和重复检测管）；
+    ratio < 1 才会真的提前掐断，用于「我就是想限制思考时长」的实验。
+    """
     if thinking != "slow":
         return None
-    return max(THINK_BUDGET_MIN, int(max_new_tokens * THINK_BUDGET_RATIO))
+    budget = int(max_new_tokens * ratio)
+    if budget >= max_new_tokens:
+        return None
+    return max(THINK_BUDGET_MIN, budget)
 
 
 def budget_for(task_type: str, args) -> int:
@@ -349,7 +362,9 @@ def stage_generate(items: list[dict], args, run_dir: str, fingerprint: str) -> N
                 fast_thinking=(args.thinking == "fast"),
                 max_new_tokens=max_new,
                 progress_cb=on_step,
-                think_budget=think_budget_for(max_new, args.thinking),
+                think_budget=think_budget_for(
+                    max_new, args.thinking, float(getattr(args, "think_ratio", THINK_BUDGET_RATIO) or THINK_BUDGET_RATIO)
+                ),
             )
             elapsed = time.time() - t0
             results = list(out["results"])
@@ -372,6 +387,8 @@ def stage_generate(items: list[dict], args, run_dir: str, fingerprint: str) -> N
                     if (res.get("content") or "").strip():
                         res["rescued"] = True
                         res["rescue_budget"] = rescue_budget
+                        # 保留被掐断的原因（补答后 stop_reason 会被这一轮覆盖）
+                        res["rescue_reason"] = results[index].get("stop_reason")
                         results[index] = res
                 print(
                     f"[generate] 救援轮：{len(rescue_rows)} 题被掐断（"
@@ -398,6 +415,7 @@ def stage_generate(items: list[dict], args, run_dir: str, fingerprint: str) -> N
                     "output_tokens": res["output_tokens"],
                     "stop_reason": res.get("stop_reason", "natural"),
                     "rescued": bool(res.get("rescued")),
+                    "rescue_reason": res.get("rescue_reason"),
                     "truncated": not (res.get("content") or "").strip(),
                     "retrieved_chunk_ids": retrieved_ids,
                 }, ensure_ascii=False) + "\n")
@@ -765,6 +783,9 @@ def main() -> None:
                         help="重跑截断题时把输出预算放大若干倍（默认 1.0）")
     parser.add_argument("--budget-cap", type=int, default=0,
                         help="单题输出预算上限（0 表示不设上限）")
+    parser.add_argument("--think-ratio", type=float, default=THINK_BUDGET_RATIO,
+                        help="思考早停线占输出预算的比例；≥1 表示不额外设早停线（默认，"
+                             "思考时长由 max_new_tokens 与重复检测约束），<1 用于限制思考时长")
     parser.add_argument("--kb-k", type=int, default=None,
                         help="L2/L3 预检索的 top-k（默认用 KB_TOP_K）")
     args = parser.parse_args()
@@ -777,6 +798,9 @@ def main() -> None:
         batch_size=args.batch_size,
         prompt_version=PROMPT_VERSION,
         generation_protocol=GENERATION_PROTOCOL,
+        budget_scale=float(getattr(args, "budget_scale", 1.0) or 1.0),
+        budget_cap=int(getattr(args, "budget_cap", 0) or 0),
+        think_ratio=float(getattr(args, "think_ratio", THINK_BUDGET_RATIO) or THINK_BUDGET_RATIO),
         dataset=os.path.basename(args.dataset_dir),
     )
     run_dir = os.path.join(args.out_dir, run_id)

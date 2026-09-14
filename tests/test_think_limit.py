@@ -89,9 +89,14 @@ class TestBudgets:
     def test_fast_thinking_gets_less(self):
         assert token_budget("mcq_single", "fast", "L0") < token_budget("mcq_single", "slow", "L0")
 
-    def test_think_budget_is_half_of_output_budget(self):
-        assert think_budget_for(2048, "slow") == 1024
-        assert think_budget_for(320, "slow") == 512  # 保底
+    def test_no_early_stop_by_default(self):
+        """默认不额外设早停线：思考时长交给 max_new_tokens 和重复检测。"""
+        assert think_budget_for(2048, "slow") is None
+        assert think_budget_for(256, "slow") is None
+
+    def test_ratio_below_one_does_set_an_early_stop(self):
+        assert think_budget_for(2048, "slow", 0.5) == 1024
+        assert think_budget_for(320, "slow", 0.5) == 512  # 保底
 
     def test_fast_thinking_has_no_thinking_block(self):
         assert think_budget_for(2048, "fast") is None
