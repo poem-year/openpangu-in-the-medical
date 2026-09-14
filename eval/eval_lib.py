@@ -356,8 +356,49 @@ class Score:
     detail: str = ""
 
 
-def score_item(item: dict, output: str, thinking: str = "") -> Score:
-    """按题型判分。output 为模型正文（不含思考过程）。"""
+def choice_from_conclusion(item: dict, reply: str, hypotheses: list[dict] | None) -> str | None:
+    """智能体口径的单选题判分：它按问诊作答，不会写「答案：X」。
+
+    两条路，从可靠到宽松：
+    1. 某个选项的文本（含同义近似）出现在回复里，且没有别的选项也出现；
+    2. 取 `assessment.hypotheses` 里最可能的那条，与各选项文本做相似度匹配（≥0.5）。
+    都拿不到就返回 None（按错处理，不猜）。
+    """
+    options = item.get("options") or {}
+    if not options:
+        return None
+    hit_letters = [letter for letter, text in options.items()
+                   if text and fuzzy_contains(str(text), reply, threshold=0.6)]
+    if len(hit_letters) == 1:
+        return hit_letters[0].upper()
+    if hypotheses:
+        best_name = ""
+        best_likelihood = -1.0
+        order = {"low": 0.0, "medium": 1.0, "high": 2.0}
+        for hypothesis in hypotheses:
+            name = str((hypothesis or {}).get("name") or "").strip()
+            if not name:
+                continue
+            rank = order.get(str(hypothesis.get("likelihood")), 0.0)
+            if rank > best_likelihood:
+                best_name, best_likelihood = name, rank
+        if best_name:
+            scored = sorted(
+                ((similarity(best_name, str(text or "")), letter)
+                 for letter, text in options.items()),
+                reverse=True,
+            )
+            if scored and scored[0][0] >= 0.5:
+                return scored[0][1].upper()
+    return None
+
+
+def score_item(item: dict, output: str, thinking: str = "", extra: dict | None = None) -> Score:
+    """按题型判分。output 为模型正文（不含思考过程）。
+
+    extra：可选的额外信息（评测时传整条预测记录）。目前用于智能体口径——
+    它按问诊作答、不输出「答案：X」，单选题改从结论与回复里反推选项。
+    """
     task = item["task_type"]
     text = output or ""
     combined = (output or "") + "\n" + (thinking or "")
@@ -365,6 +406,8 @@ def score_item(item: dict, output: str, thinking: str = "") -> Score:
 
     if task == "mcq_single":
         got = parse_mcq_choice(text, item.get("options"))
+        if got is None and extra:
+            got = choice_from_conclusion(item, text, extra.get("hypotheses"))
         want = (item.get("answer") or "").strip().upper()
         correct = got == want
         metrics["choice"] = got

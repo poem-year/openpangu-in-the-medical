@@ -622,7 +622,7 @@ def stage_score(items: list[dict], args, run_dir: str, fingerprint: str) -> dict
             item = by_id.get(item_id)
             if item is None:
                 continue
-            sc = score_item(item, pred["content"], pred.get("thinking", ""))
+            sc = score_item(item, pred["content"], pred.get("thinking", ""), extra=pred)
             ai = ai_judgments.get(item_id)
             if ai is not None and ai.get("score") is not None:
                 sc.score = float(ai["score"])

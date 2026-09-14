@@ -53,8 +53,43 @@ MAX_TOOL_ROUNDS = 3
 TOOL_MAX_TOKENS = int(os.environ.get("TOOL_MAX_TOKENS", "1280"))
 FINALIZE_MAX_TOKENS = int(os.environ.get("FINALIZE_MAX_TOKENS", "3600"))
 BATCH_SIZE = int(os.environ.get("AGENT_BATCH_SIZE", "16"))
+# RAG 信息量控制：检索工具最多返回几条。条数直接决定收口轮 prompt 的 prefill 长度
+# （每条片段约 500 字），是「快」与「给足资料」之间的主要旋钮。
+RETRIEVAL_K_CAP = int(os.environ.get("AGENT_RETRIEVAL_K", "3"))
+# 预注入确定性工具：check_red_flags / timeline_calc 是纯规则函数，评测端先算好写进
+# system 提示，模型就不必为它们单开一轮（省约 10 秒/批）。置 0 可关掉，恢复「全靠模型自己调」。
+PREINJECT_TOOLS = os.environ.get("AGENT_PREINJECT_TOOLS", "1") != "0"
 
 _TOOLS_BY_NAME = {tool.__name__ if hasattr(tool, "__name__") else tool.name: tool for tool in ALL_TOOLS}
+
+_ORIGINAL_RETRIEVE = _TOOLS_BY_NAME["retrieve_evidence"]
+
+
+def _capped_retrieve_evidence(query: str, k: int = RETRIEVAL_K_CAP) -> str:
+    """检索工具包装：把条数封顶（模型要 5 条也只给 3 条）。"""
+    try:
+        wanted = min(int(k or RETRIEVAL_K_CAP), RETRIEVAL_K_CAP)
+    except (TypeError, ValueError):
+        wanted = RETRIEVAL_K_CAP
+    return _ORIGINAL_RETRIEVE(query, max(1, wanted))
+
+
+def prelude_for(question: str) -> str:
+    """预注入的确定性工具结果（写进 system 提示的附加说明）。"""
+    notes: list[str] = []
+    try:
+        red = _TOOLS_BY_NAME["check_red_flags"]([question])
+    except Exception:  # noqa: BLE001
+        red = ""
+    if red:
+        notes.append(f"【危险信号已由系统核对】{red}")
+    if notes:
+        notes.append("上面这一步系统已经做过，不必再调用对应工具；其它工具照常按需调用。")
+    return "\n\n".join(notes)
+
+
+# 检索工具换成封顶版（模型要 5 条也只给 3 条）
+_TOOLS_BY_NAME["retrieve_evidence"] = _capped_retrieve_evidence
 
 
 def tool_specs() -> list[dict]:
@@ -196,8 +231,13 @@ def main() -> int:
                 if hit is not None:
                     results[item["id"]] = prescan_result(hit, templates)
                 else:
+                    system_text = system_prompt
+                    if PREINJECT_TOOLS:
+                        prelude = prelude_for(question)
+                        if prelude:
+                            system_text = f"{system_prompt}\n\n{prelude}"
                     state[item["id"]] = {
-                        "messages": [{"role": "system", "content": system_prompt},
+                        "messages": [{"role": "system", "content": system_text},
                                      {"role": "user", "content": question}],
                         "draft": "", "rounds": 0, "recorder": TurnRecorder(),
                     }
