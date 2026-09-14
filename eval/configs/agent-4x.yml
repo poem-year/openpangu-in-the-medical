@@ -1,0 +1,10 @@
+# 智能体全链路：批处理驱动，4 倍预算，RAG 每题 3 条
+name: agent-batch-4x
+engine: agent-batch
+layer: AGENT
+budget_scale: 4.0
+retrieval_k: 3
+batch_size: 32
+judge: true
+judge_workers: 6
+notes: 智能体全链路（工具+检索+审查），批处理；正式报告的智能体档

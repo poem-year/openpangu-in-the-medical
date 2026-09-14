@@ -1,0 +1,9 @@
+# L0 基线：裸模型直问，评测端自己拼提示词（对照基准，所有层的起点）
+name: l0-baseline
+engine: direct
+layer: L0
+thinking: slow
+budget_scale: 1.0
+batch_size: 32
+judge: true
+notes: 裸模型基线，正式报告用

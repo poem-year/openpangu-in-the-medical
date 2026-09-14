@@ -1,0 +1,10 @@
+# 智能体冒烟：每维度 2 题、只出规则判分，用于改完代码先跑一遍确认没崩
+name: agent-smoke
+engine: agent-batch
+layer: AGENT
+budget_scale: 4.0
+retrieval_k: 3
+batch_size: 8
+per_dimension: 2
+judge: false
+notes: 冒烟（每维度 2 题、不跑 AI 判分），约 1 分钟

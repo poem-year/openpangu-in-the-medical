@@ -1,0 +1,9 @@
+# L3 混合检索：向量 + BM25 → RRF + 标定阈值 0.55（走 run_eval 的直连路径）
+name: l3-hybrid
+engine: direct
+layer: L3
+thinking: slow
+budget_scale: 4.0
+batch_size: 32
+judge: true
+notes: RAG 层，检索条数由 KB_TOP_K 控制（默认 5）
