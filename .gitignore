@@ -3,6 +3,18 @@ __pycache__/
 .pytest_cache/
 .env
 .venv-pangu/
+# A 线知识库：语料、索引与生成产物不入库（登记表 sources.yaml 除外）
+kb/index/
+kb/corpus/*
+!kb/corpus/sources.yaml
+kb/eval/queries_candidates.jsonl
+kb/eval/*_report.json
+# 采集层原始件 647MB，其中单个文件 563MB（超 GitHub 100MB 上限），且是第三方许可语料。
+# 只保留脚本、台账（sources.json）、汇总与分级说明；原始件在本机留存、不入库。
+# 换机器时按 kb/corpus_raw/README.md 重下：_scripts/download.py → _scripts/convert.py → kb.build
+kb/corpus_raw/hf_datasets/
+kb/corpus_raw/guidelines_cn/
+kb/corpus_raw/literature_oa/
 fusion_result.json
 op_test_result.json
 logs/

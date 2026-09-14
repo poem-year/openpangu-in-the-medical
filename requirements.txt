@@ -47,3 +47,24 @@ uuid-utils==0.17.1
 websockets==16.1.1
 xxhash==4.0.1
 zstandard==0.25.0
+
+# ---------------------------------------------------------------------------
+# A 线检索依赖（kb/）。与上面的智能体依赖同装在一个 .venv 里；
+# 安装顺序很重要：先装本地 CPU 版 torch，再装其余包，
+# 否则 pip 会拉进 torch 的完整 CUDA 栈（多 60+ 个包、好几 GB）。
+#   pip install /data/wheels/torch-2.7.1+cpu-cp311-cp311-manylinux_2_28_x86_64.whl
+#   pip install -r requirements.txt
+# transformers / tokenizers / huggingface_hub 的版本与 .venv-pangu 保持一致，
+# 这样两个环境共用 /data/huggingface_home 里已缓存的 BGE-M3。
+# 不要装 chromadb / langchain-chroma / langchain-community：
+# 向量检索用 kb 自带的 numpy 后端，索引可读、可复现、无额外服务依赖。
+# ---------------------------------------------------------------------------
+torch==2.7.1+cpu
+transformers==4.53.2
+tokenizers==0.21.4
+huggingface_hub==0.36.2
+sentence-transformers==4.1.0
+langchain-huggingface==1.2.2
+langchain-text-splitters==1.1.2
+rank-bm25==0.2.2
+pypdf==6.18.1

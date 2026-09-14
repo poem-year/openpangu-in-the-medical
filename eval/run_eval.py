@@ -20,9 +20,12 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 import sys
 import time
 from collections import defaultdict
+
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts"))
@@ -39,12 +42,20 @@ from eval_lib import (  # noqa: E402
     score_item,
     wilson_ci,
 )
+from traceability import traceability_rate  # noqa: E402
 from pangu_infer import PanguModel  # noqa: E402
 from progress import bar as progress_bar, write_progress  # noqa: E402
 from show_report import write_html  # noqa: E402
 
 # 生成阶段就能即时判分的题型（用来在跑的过程中显示实时准确率）
 INSTANT_TASKS = {"mcq_single", "calculation", "evidence_qa"}
+
+# 救援轮的追加指令：被掐断说明上一轮已经想不明白了，这一轮要最短路径出答案。
+RESCUE_INSTRUCTION = (
+    "\n\n【输出要求】直接给结论：先用一行按题目要求的格式给出结果"
+    "（如「答案：X」/「诊断：X」），再用不超过三句话说明依据。"
+    "不要展开长篇推理，不要重复、不要复述题目。"
+)
 
 
 def pick_items(args) -> tuple[list[dict], list[dict]]:
@@ -92,17 +103,37 @@ def estimate(todo: list[dict], thinking: str, batch_size: int) -> dict:
     }
 
 
-def token_budget(task_type: str, thinking: str) -> int:
+# 接入知识库的层多给一点预算：参考资料会拉长推理，但**只多给一档、有上限**
+# （不给无限预算，是因为真正的问题不是「想得不够久」而是「会打转」——打转靠
+# scripts/pangu_infer.py 的 think_budget + 重复检测掐断，再用快思考补答一次）。
+RAG_BUDGET_BONUS = 768
+# 思考预算占输出预算的比例：慢思考最多用掉一半，剩下的留给回答。
+THINK_BUDGET_RATIO = 0.5
+THINK_BUDGET_MIN = 512
+# 生成协议版本：掐断规则或救援流程一改就必须升，否则旧结果会被当成同配置复用。
+GENERATION_PROTOCOL = "thinkcap-v1"
+
+
+def token_budget(task_type: str, thinking: str, layer: str | None = None) -> int:
     """输出预算：慢思考用全量（会先写推理），快思考按 60% 给但保底 640。"""
     base = MAX_NEW_TOKENS.get(task_type, 512)
+    if layer_has_rag(layer):
+        base += RAG_BUDGET_BONUS
     if thinking == "slow":
         return base
     return max(640, int(base * 0.6))
 
 
+def think_budget_for(max_new_tokens: int, thinking: str) -> int | None:
+    """慢思考允许多少 token 花在思考块里；快思考没有思考块，返回 None。"""
+    if thinking != "slow":
+        return None
+    return max(THINK_BUDGET_MIN, int(max_new_tokens * THINK_BUDGET_RATIO))
+
+
 def budget_for(task_type: str, args) -> int:
     """在基准预算上套用 --budget-scale / --budget-cap（用于重跑截断题）。"""
-    base = token_budget(task_type, args.thinking)
+    base = token_budget(task_type, args.thinking, getattr(args, "layer", None))
     scale = float(getattr(args, "budget_scale", 1.0) or 1.0)
     cap = int(getattr(args, "budget_cap", 0) or 0)
     out = int(base * scale)
@@ -140,10 +171,90 @@ def scan_done(pred_path: str, fingerprint: str) -> tuple[set[str], set[str]]:
     return done, truncated
 
 
+def kb_python() -> str:
+    """跑检索阶段用的解释器：kb 的依赖装在 .venv，而本脚本跑在 .venv-pangu。"""
+    return os.environ.get(
+        "KB_PYTHON", "/data/openpangu/.venv/bin/python"
+    )
+
+
+def load_contexts(run_dir: str) -> dict[str, dict]:
+    """读 <run_dir>/contexts.jsonl，返回 {题号: 记录}。"""
+    path = os.path.join(run_dir, "contexts.jsonl")
+    if not os.path.exists(path):
+        return {}
+    contexts: dict[str, dict] = {}
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            record = json.loads(line)
+            contexts[str(record.get("id"))] = record
+    return contexts
+
+
+def stage_retrieve(items: list[dict], args, run_dir: str, *, force: bool = False) -> None:
+    """L2/L3 预检索阶段：用 .venv 的 kb 包检索，写 contexts.jsonl 供生成阶段使用。"""
+    out_path = os.path.join(run_dir, "contexts.jsonl")
+    if os.path.exists(out_path) and not force:
+        print(f"[retrieve] 已有预检索结果，跳过：{out_path}")
+        return
+    input_path = os.path.join(run_dir, "retrieve_input.jsonl")
+    with open(input_path, "w", encoding="utf-8") as fh:
+        for item in items:
+            fh.write(json.dumps(
+                {"id": item["id"], "question": item.get("question", ""),
+                 "task_type": item.get("task_type")},
+                ensure_ascii=False) + "\n")
+
+    command = [
+        kb_python(), "-m", "kb.eval_retrieve",
+        "--input", input_path, "--out", out_path, "--layer", args.layer,
+    ]
+    if getattr(args, "kb_k", None):
+        command += ["-k", str(args.kb_k)]
+    print(f"[retrieve] 预检索 {len(items)} 题（{args.layer}）…")
+    proc = subprocess.run(command, cwd=PROJECT_DIR, check=False)
+    if proc.returncode != 0:
+        raise SystemExit(
+            f"[retrieve] 预检索失败（退出码 {proc.returncode}）。\n"
+            "请先确认知识库已建好：/data/openpangu/.venv/bin/python -m kb.build"
+        )
+
+
+def ensure_contexts(items: list[dict], args, run_dir: str) -> dict[str, dict]:
+    """按需补跑预检索；非 RAG 层返回空字典。
+
+    覆盖检查按**题号**做，不按行数——一次被中断的预检索会留下半份
+    contexts.jsonl，只比行数的话可能刚好够、却缺着最关键的那几题；
+    缺题时必须强制重跑（stage_retrieve 见到文件存在会跳过，不传 force 就等于没跑）。
+    """
+    if not layer_has_rag(args.layer):
+        return {}
+    contexts = load_contexts(run_dir)
+    missing = [item["id"] for item in items if str(item["id"]) not in contexts]
+    if missing:
+        print(
+            f"[retrieve] 预检索结果缺 {len(missing)} 题"
+            f"（已有 {len(contexts)} 题，多为上次中断留下的半成品），强制重跑"
+        )
+        stage_retrieve(items, args, run_dir, force=True)
+        contexts = load_contexts(run_dir)
+        still_missing = [item["id"] for item in items if str(item["id"]) not in contexts]
+        if still_missing:
+            raise SystemExit(
+                f"[retrieve] 重跑后仍缺 {len(still_missing)} 题：{still_missing[:5]}…"
+                "请检查 kb.eval_retrieve 的输出。"
+            )
+    return contexts
+
+
 def stage_generate(items: list[dict], args, run_dir: str, fingerprint: str) -> None:
     pred_path = os.path.join(run_dir, "predictions.jsonl")
     done, truncated_prev = scan_done(pred_path, fingerprint)
     pending = [it for it in items if it["id"] not in done]
+    contexts = ensure_contexts(items, args, run_dir)
     if truncated_prev:
         print(f"[generate] 有 {len(truncated_prev)} 题上次被截断，本次用调大后的预算重跑")
     print(f"[generate] 已完成 {len(done)} 题，待跑 {len(pending)} 题，配置指纹 {fingerprint}")
@@ -157,12 +268,12 @@ def stage_generate(items: list[dict], args, run_dir: str, fingerprint: str) -> N
         key=lambda it: (
             it["task_type"],
             budget_for(it["task_type"], args),
-            len(build_prompt(it, args.layer)),
+            len(build_prompt(it, args.layer, contexts.get(it["id"], {}).get("evidence"))),
             it["id"],
         ),
     )
     for it in ordered:
-        it["_prompt"] = build_prompt(it, args.layer)
+        it["_prompt"] = build_prompt(it, args.layer, contexts.get(it["id"], {}).get("evidence"))
 
     model = PanguModel()
     model.load()
@@ -238,9 +349,38 @@ def stage_generate(items: list[dict], args, run_dir: str, fingerprint: str) -> N
                 fast_thinking=(args.thinking == "fast"),
                 max_new_tokens=max_new,
                 progress_cb=on_step,
+                think_budget=think_budget_for(max_new, args.thinking),
             )
             elapsed = time.time() - t0
-            for it, res in zip(batch, out["results"]):
+            results = list(out["results"])
+
+            # 救援轮：被掐断在思考块里（打转或思考超标）的题，改用快思考补答一次。
+            # 快思考没有思考块，不会重蹈覆辙；同批最多补一次，避免无限重试。
+            rescue_rows = [
+                index for index, res in enumerate(results)
+                if not res.get("answered") and res.get("stop_reason") in ("think_cap", "repeat")
+            ]
+            if rescue_rows:
+                rescue_budget = max(320, min(max_new, 640))
+                rescue_out = model.chat_batch(
+                    [batch[index]["_prompt"] + RESCUE_INSTRUCTION for index in rescue_rows],
+                    system_prompt=None,
+                    fast_thinking=True,
+                    max_new_tokens=rescue_budget,
+                )
+                for index, res in zip(rescue_rows, rescue_out["results"]):
+                    if (res.get("content") or "").strip():
+                        res["rescued"] = True
+                        res["rescue_budget"] = rescue_budget
+                        results[index] = res
+                print(
+                    f"[generate] 救援轮：{len(rescue_rows)} 题被掐断（"
+                    + "、".join(sorted({results[i].get("stop_reason", "?") for i in rescue_rows}))
+                    + f"），其中 {sum(1 for i in rescue_rows if results[i].get('rescued'))} 题补答成功"
+                )
+
+            for it, res in zip(batch, results):
+                retrieved_ids = (contexts.get(it["id"]) or {}).get("retrieved_chunk_ids") or []
                 fh.write(json.dumps({
                     "id": it["id"],
                     "dimension_code": it["dimension_code"],
@@ -248,6 +388,7 @@ def stage_generate(items: list[dict], args, run_dir: str, fingerprint: str) -> N
                     "layer": args.layer,
                     "fingerprint": fingerprint,
                     "prompt_version": PROMPT_VERSION,
+                    "generation_protocol": GENERATION_PROTOCOL,
                     "thinking_mode": args.thinking,
                     "max_new_tokens": max_new,
                     "budget_scale": float(getattr(args, "budget_scale", 1.0) or 1.0),
@@ -255,7 +396,10 @@ def stage_generate(items: list[dict], args, run_dir: str, fingerprint: str) -> N
                     "thinking": res["thinking"],
                     "raw": res["raw"],
                     "output_tokens": res["output_tokens"],
-                    "truncated": res["output_tokens"] >= max_new,
+                    "stop_reason": res.get("stop_reason", "natural"),
+                    "rescued": bool(res.get("rescued")),
+                    "truncated": not (res.get("content") or "").strip(),
+                    "retrieved_chunk_ids": retrieved_ids,
                 }, ensure_ascii=False) + "\n")
                 written += 1
                 dim = dim_state[it["dimension_code"]]
@@ -470,6 +614,8 @@ def stage_score(items: list[dict], args, run_dir: str, fingerprint: str) -> dict
                 "output_tokens": pred.get("output_tokens"),
                 "truncated": pred.get("truncated", False),
                 "judge_source": (ai or {}).get("source", "rule"),
+                "content": pred.get("content", ""),
+                "retrieved_chunk_ids": pred.get("retrieved_chunk_ids") or [],
             }
             rows.append(row)
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
@@ -524,13 +670,29 @@ def headline_metrics(rows: list[dict], run_dir: str, layer: str = "L0") -> dict:
         safe_rate = 1 - dirty / total if total else None
 
     rag = layer_has_rag(layer)
+    citation_traceability = None
+    citation_note = "基线无知识库、无引用，按定义固定为 0"
+    if rag:
+        track = traceability_rate(
+            [
+                {
+                    "id": r["id"],
+                    "answer": r.get("content") or "",
+                    "retrieved_chunk_ids": r.get("retrieved_chunk_ids") or [],
+                }
+                for r in rows
+            ]
+        )
+        citation_traceability = track["locatable_rate"]
+        citation_note = (
+            f"本轮共 {track['n']} 题有检索证据；上报的是「引用可定位率」"
+            "（引用的 chunk_id 确实出现在本轮检索结果里的比例）；"
+            "「可支撑」需 AI 判分或人工抽检，见 eval/traceability.py"
+        )
     return {
         "accuracy": round(accuracy, 4) if accuracy is not None else None,
-        "citation_traceability": 0.0 if not rag else None,
-        "citation_traceability_note": (
-            "基线无知识库、无引用，按定义固定为 0"
-            if not rag else "待接入检索后用真实 chunk_id 计算（可定位 + 可支撑）"
-        ),
+        "citation_traceability": citation_traceability if rag else 0.0,
+        "citation_traceability_note": citation_note,
         "safety_compliance": round(safe_rate, 4) if safe_rate is not None else None,
         "rag_enabled": rag,
         "note": "引用可追溯率是知识库模块指标，基线固定为 0；安全合规率来自 D09–D11 的 rubric 判分；"
@@ -571,8 +733,6 @@ def rubric_stats(run_dir: str) -> dict:
 
 def stage_judge(run_dir: str, args) -> None:
     """调用 DeepSeek：D09–D11 做 rubric 判分，开放题（D03–D06）做诊断等价复核。"""
-    import subprocess
-
     here = os.path.dirname(os.path.abspath(__file__))
     workers = ["--workers", str(args.judge_workers)]
     for script, extra in (("ai_judge.py", workers), ("judge.py", workers)):
@@ -586,7 +746,7 @@ def stage_judge(run_dir: str, args) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--stage", default="all",
-                        choices=["estimate", "generate", "judge", "score", "report", "all"])
+                        choices=["estimate", "retrieve", "generate", "judge", "score", "report", "all"])
     parser.add_argument("--dataset-dir", default=DATASET_DIR)
     parser.add_argument("--out-dir", default="/data/openpangu/eval/runs")
     parser.add_argument("--layer", default="L0")
@@ -605,6 +765,8 @@ def main() -> None:
                         help="重跑截断题时把输出预算放大若干倍（默认 1.0）")
     parser.add_argument("--budget-cap", type=int, default=0,
                         help="单题输出预算上限（0 表示不设上限）")
+    parser.add_argument("--kb-k", type=int, default=None,
+                        help="L2/L3 预检索的 top-k（默认用 KB_TOP_K）")
     args = parser.parse_args()
 
     todo, skipped = pick_items(args)
@@ -614,6 +776,7 @@ def main() -> None:
         thinking=args.thinking,
         batch_size=args.batch_size,
         prompt_version=PROMPT_VERSION,
+        generation_protocol=GENERATION_PROTOCOL,
         dataset=os.path.basename(args.dataset_dir),
     )
     run_dir = os.path.join(args.out_dir, run_id)
@@ -633,6 +796,12 @@ def main() -> None:
           f"（不含模型加载与判分）")
 
     if args.stage == "estimate":
+        return
+    if args.stage == "retrieve":
+        if not layer_has_rag(args.layer):
+            print(f"[retrieve] 层级 {args.layer} 不接入知识库，无需预检索")
+            return
+        stage_retrieve(todo, args, run_dir, force=True)
         return
     if args.stage in ("generate", "all"):
         stage_generate(todo, args, run_dir, fingerprint)

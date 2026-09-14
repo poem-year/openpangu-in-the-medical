@@ -21,7 +21,7 @@ import re
 from dataclasses import dataclass
 
 DATASET_DIR = "/data/openpangu/正式测评集"
-PROMPT_VERSION = "v1"
+PROMPT_VERSION = "v2"
 
 # 各题型的输出预算（慢思考口径）。这些值按实测调过：
 # 慢思考会先写完整推理再给结论，早先预算偏小导致 312 题里 180 题被截断、分数虚低。
@@ -42,7 +42,7 @@ MAX_NEW_TOKENS = {
 # L0 阶段跑不了、直接标注跳过的题型（原因写进结果，不静默丢弃）
 SKIP_REASONS = {
     "agentic_history_taking": "需要先实现按隐藏信息作答的模拟患者（多轮交互），L0 阶段不跑",
-    "retrieval": "需要 A 线检索器（Recall@5/nDCG 依赖召回结果），L0 阶段不跑",
+    "retrieval": "金标准在 CmedqaRetrieval 语料里，本期只建业务知识库、未索引该语料，故跳过",
 }
 
 # 哪些层才有「知识库引用」：引用可追溯率是知识库模块的指标，基线（L0/L1）没有引用，
@@ -94,7 +94,30 @@ def _format_options(options: dict | None) -> str:
     return "\n".join(f"{k}. {v}" for k, v in options.items())
 
 
-def build_prompt(item: dict, layer: str = "L0") -> str:
+def format_rag_context(evidence: list[dict] | None) -> str:
+    """把检索结果渲染成提示词里的参考资料块（含真实 chunk_id，供引用校验）。"""
+    if not evidence:
+        return (
+            "【参考资料】\n（本轮未检索到相关资料。请如实说明没有查到资料，"
+            "不要编造资料内容、出处或 chunk_id。）\n\n"
+        )
+    lines = ["【参考资料】（只能用下面这些资料作答，chunk_id 必须原样引用）"]
+    for index, item in enumerate(evidence, start=1):
+        source = item.get("source") or "未标注来源"
+        section = item.get("section") or "未划分章节"
+        lines.append(
+            f"[{index}] 来源：{source}｜章节：{section}｜chunk_id：{item.get('chunk_id', '')}"
+        )
+        lines.append(str(item.get("text", "")).strip())
+        lines.append("")
+    lines.append(
+        "引用要求：每条结论后面用 [chunk_id: <上面的 chunk_id>] 标注依据；"
+        "资料里没有的内容不要写，也不要编造 chunk_id。"
+    )
+    return "\n".join(lines).strip() + "\n\n"
+
+
+def build_prompt(item: dict, layer: str = "L0", rag_context: list[dict] | None = None) -> str:
     """把一道题拼成给模型的用户消息（提示词模板固定，版本记在结果里）。"""
     task = item["task_type"]
     question = item.get("question", "").strip()
@@ -102,6 +125,8 @@ def build_prompt(item: dict, layer: str = "L0") -> str:
     dialogue = item.get("dialogue") or []
 
     body = ""
+    if layer_has_rag(layer):
+        body += format_rag_context(rag_context)
     if context:
         body += f"【病例/材料】\n{context}\n\n"
     if dialogue:

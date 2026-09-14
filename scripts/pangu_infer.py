@@ -41,6 +41,53 @@ THINK_START = "[unused16]"
 THINK_END = "[unused17]"
 TEXT_END = "[unused10]"
 
+# 重复检测默认值：尾部 24 个 token 组成的片段，在最近 512 个 token 里出现过
+# 就算退化打转。实测「…448.8880 就是 448.8880…」这类循环在 24-gram 上一定重复，
+# 而正常推理（引用、换行、数字）几乎不会。
+DEFAULT_REPEAT_NGRAM = 24
+DEFAULT_REPEAT_WINDOW = 512
+
+
+def stop_reason_for(
+    tokens: list[int],
+    *,
+    think_end_id: int,
+    think_budget: int | None = None,
+    repeat_ngram: int = 0,
+    repeat_window: int = DEFAULT_REPEAT_WINDOW,
+) -> str | None:
+    """纯函数：判断这一行是否该提前停止（None=继续），返回停止原因。
+
+    两种停止原因：
+    - `think_cap`：还在思考块内（没出现 think_end），且思考已用掉 `think_budget`；
+    - `repeat`：还在思考块内，且尾部 `repeat_ngram` 个 token 紧挨着重复（上一段一模一样），
+      或在最近 `repeat_window` 个 token 里重复出现 ≥3 次——贪心解码一旦进循环就出不来。
+
+    调用方拿到原因后应改用快思考补答一次，而不是把思考半截当回答（见 run_eval 的救援轮）。
+
+    **为什么只在思考块内判重复**：正式答案里本来就会有列表、表格、同类句式
+    （「- 诊断标准：…」「SBP ≥140 mmHg」），24-gram 撞一次是常态；早期版本
+    在答案段也判，结果把一份写得正好的答案判成打转丢掉（2026-09-14 实测踩到）。
+    """
+    in_thinking = think_end_id not in tokens
+    if think_budget is not None and in_thinking and len(tokens) >= think_budget:
+        return "think_cap"
+    if repeat_ngram > 0 and in_thinking and len(tokens) >= repeat_ngram * 3:
+        window = tokens[-repeat_window:] if repeat_window > 0 else tokens
+        tail = tuple(window[-repeat_ngram:])
+        if len(window) >= repeat_ngram * 2:
+            previous = tuple(window[-repeat_ngram * 2:-repeat_ngram])
+            if previous == tail:  # 紧挨着重复（逐字复读）
+                return "repeat"
+        occurrences = 0
+        limit = len(window) - repeat_ngram + 1
+        for start in range(limit):
+            if tuple(window[start:start + repeat_ngram]) == tail:
+                occurrences += 1
+                if occurrences >= 3:
+                    return "repeat"
+    return None
+
 
 def split_thinking(text: str) -> tuple[str, str]:
     """把模型原始输出拆成 (thinking, content)。快思考时 thinking 为空串。"""
@@ -140,6 +187,74 @@ class PanguModel:
             "fast_thinking": fast_thinking,
         }
 
+    def chat_messages(
+        self,
+        messages: list[dict],
+        *,
+        fast_thinking: bool = True,
+        max_new_tokens: int = 1024,
+        do_sample: bool = False,
+        temperature: float = 1.0,
+        top_p: float = 0.8,
+    ) -> dict:
+        """按给定消息列表生成一轮（多轮对话 / 工具调用服务用）。
+
+        messages 的 role 支持 system / user / assistant / tool，按时间顺序排列。
+        与 chat() 的区别：不限制「最后一条必须是 user」，因此可以喂入
+        「…工具：结果」这种以 tool 结尾的消息（openPangu 的 chat template 支持工具角色）。
+
+        快思考：在最后一条 user/tool 消息末尾追加 " /no_think"（模型自带的开关）。
+        """
+        import torch
+
+        self.load()
+        payload = [dict(item) for item in messages]
+        if fast_thinking:
+            for item in reversed(payload):
+                if item.get("role") in ("user", "tool"):
+                    text = str(item.get("content") or "")
+                    if not text.rstrip().endswith("/no_think"):
+                        item["content"] = f"{text} /no_think"
+                    break
+
+        text = self._tokenizer.apply_chat_template(
+            payload, tokenize=False, add_generation_prompt=True
+        )
+        inputs = self._tokenizer([text], return_tensors="pt")
+        input_ids = inputs["input_ids"].to(self.device)
+        attention_mask = inputs["attention_mask"].to(self.device)
+
+        gen_kwargs = dict(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            max_new_tokens=max_new_tokens,
+            eos_token_id=EOS_TOKEN_ID,
+            pad_token_id=0,
+        )
+        if do_sample:
+            gen_kwargs.update(do_sample=True, temperature=temperature, top_p=top_p)
+        else:
+            gen_kwargs.update(do_sample=False)
+
+        start = time.time()
+        with torch.no_grad():
+            outputs = self._model.generate(**gen_kwargs)
+        elapsed = time.time() - start
+
+        new_tokens = outputs[0][input_ids.shape[1]:]
+        raw = self._tokenizer.decode(new_tokens, skip_special_tokens=False)
+        thinking, content = split_thinking(raw)
+        return {
+            "content": content,
+            "thinking": thinking,
+            "raw": raw,
+            "input_tokens": int(input_ids.shape[1]),
+            "output_tokens": int(new_tokens.shape[0]),
+            "elapsed_seconds": round(elapsed, 2),
+            "tokens_per_second": round(new_tokens.shape[0] / max(elapsed, 1e-6), 1),
+            "fast_thinking": fast_thinking,
+        }
+
     def chat_batch(
         self,
         questions: list[str],
@@ -151,6 +266,9 @@ class PanguModel:
         temperature: float = 1.0,
         top_p: float = 0.8,
         progress_cb=None,
+        think_budget: int | None = None,
+        repeat_ngram: int = DEFAULT_REPEAT_NGRAM,
+        repeat_window: int = DEFAULT_REPEAT_WINDOW,
     ) -> dict:
         """一次跑多条问题（左填充 + 并行解码）。
 
@@ -160,8 +278,13 @@ class PanguModel:
 
         返回 {"results": [...同 chat() 的 dict...], "elapsed_seconds": 总耗时,
               "total_output_tokens": 总输出 token, "tokens_per_second": 总吞吐}
+
+        think_budget / repeat_ngram：见 `stop_reason_for`。触发时**只结束触发的那一行**
+        （逐行强制 EOS，同批其它行继续），并在结果的 `stop_reason` 里标注
+        （natural / think_cap / repeat / max_tokens），供上层决定是否用快思考补答。
         """
         import torch
+        from transformers import LogitsProcessor, LogitsProcessorList
 
         if not questions:
             return {"results": [], "elapsed_seconds": 0.0, "total_output_tokens": 0,
@@ -193,6 +316,8 @@ class PanguModel:
         input_ids = enc["input_ids"].to(self.device)
         attention_mask = enc["attention_mask"].to(self.device)
         prompt_len = input_ids.shape[1]
+        think_end_id = tokenizer.convert_tokens_to_ids(THINK_END)
+        eos_id = int(EOS_TOKEN_ID)
 
         gen_kwargs = dict(
             input_ids=input_ids,
@@ -222,15 +347,47 @@ class PanguModel:
 
             stopping_criteria = StoppingCriteriaList([_ProgressHook()])
 
+        # 逐行停止：某一行的思考超标或开始打转时，把它的 EOS logit 顶到最大，
+        # 这一行当步结束，同批其它行照常继续（StoppingCriteria 做不到逐行）。
+        forced_reason: dict[int, str] = {}
+        if think_budget is not None or repeat_ngram > 0:
+            prompt_len_local = prompt_len
+
+            class _RowStop(LogitsProcessor):
+                def __call__(self, input_ids, scores):  # noqa: D102
+                    for row in range(input_ids.shape[0]):
+                        if row in forced_reason:
+                            continue
+                        tokens = input_ids[row, prompt_len_local:].tolist()
+                        reason = stop_reason_for(
+                            tokens,
+                            think_end_id=think_end_id,
+                            think_budget=think_budget,
+                            repeat_ngram=repeat_ngram,
+                            repeat_window=repeat_window,
+                        )
+                        if reason:
+                            forced_reason[row] = reason
+                            # 用「本行最大 logit + 100」而不是 inf：贪心一定选中它，
+                            # 万一是采样也不会把 softmax 打成 NaN。
+                            scores[row, eos_id] = scores[row].max() + 100.0
+                    return scores
+
+            processors = LogitsProcessorList([_RowStop()])
+        else:
+            processors = None
+
         with torch.no_grad():
             if stopping_criteria is not None:
                 gen_kwargs["stopping_criteria"] = stopping_criteria
+            if processors is not None:
+                gen_kwargs["logits_processor"] = processors
             outputs = self._model.generate(**gen_kwargs)
         elapsed = time.time() - start
 
         results = []
         total_new = 0
-        for row, question in zip(outputs, questions):
+        for row_index, (row, question) in enumerate(zip(outputs, questions)):
             new_tokens = row[prompt_len:]
             if EOS_TOKEN_ID in new_tokens.tolist():
                 stop_at = new_tokens.tolist().index(EOS_TOKEN_ID)
@@ -241,6 +398,13 @@ class PanguModel:
                 new_tokens = new_tokens[: int(keep[-1]) + 1]
             raw = tokenizer.decode(new_tokens, skip_special_tokens=False)
             thinking, content = split_thinking(raw)
+            reason = forced_reason.get(row_index, "natural")
+            if reason not in ("think_cap", "repeat") and len(new_tokens) >= max_new_tokens:
+                reason = "max_tokens"
+            if reason in ("think_cap", "repeat"):
+                # 被掐断在思考块里：这段文本是「想了一半的话」，不是回答。
+                # split_thinking 在找不到 think_end 时会把全文当 content，这里纠正过来。
+                thinking, content = raw.strip(), ""
             total_new += int(new_tokens.shape[0])
             results.append(
                 {
@@ -249,6 +413,8 @@ class PanguModel:
                     "raw": raw,
                     "output_tokens": int(new_tokens.shape[0]),
                     "fast_thinking": fast_thinking,
+                    "stop_reason": reason,
+                    "answered": bool(content.strip()),
                 }
             )
 

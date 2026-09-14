@@ -87,24 +87,26 @@ def download(repo: str, path: str, dest: Path, expect: int | None, retries: int 
         return True
     url = f"{ENDPOINT}/datasets/{repo}/resolve/main/{path}"
     tmp = dest.with_suffix(dest.suffix + ".part")
-    # 残留的半截文件会让续传请求失败（镜像不支持 Range），先清掉。
-    if tmp.exists():
+    # 镜像支持 Range（实测 206 + Content-Range），所以半截文件要留着续传：
+    # 大文件（SLAKE/imgs.zip 202MB）限速时从头重下要几小时，续传只要几分钟。
+    # 万一远端文件变了，续出来的大小对不上，下面的 expect 校验会拦住。
+    if tmp.exists() and expect is not None and tmp.stat().st_size > expect:
         tmp.unlink()
     # 用 curl 下载：镜像的 CDN 偶尔会长时间不发数据，urllib 的逐块读会卡死，
     # curl 的 --speed-limit 能把这种连接判死并重试。
     cmd = [
         # 必须用 HTTP/1.1：镜像的 HTTP/2 多路复用会中途停住不发数据。
         "curl", "-sSL", "--http1.1", "--fail",
+        "-C", "-",  # 断点续传
         "--retry", str(retries), "--retry-delay", "3", "--retry-all-errors",
         "--connect-timeout", "20", "--max-time", "1800",
-        "--speed-limit", "5120", "--speed-time", "90",
+        "--speed-limit", "1024", "--speed-time", "120",
         "-o", str(tmp), url,
     ]
     proc = subprocess.run(cmd, capture_output=True, text=True)
     if proc.returncode != 0:
         print(f"  fail   {path}: curl {proc.returncode} {proc.stderr.strip()[:160]}", file=sys.stderr)
-        if tmp.exists():
-            tmp.unlink()
+        # 半截文件保留，下次跑接着传
         return False
     if expect is not None and tmp.stat().st_size != expect:
         print(f"  fail   {path}: size {tmp.stat().st_size} != {expect}", file=sys.stderr)
@@ -115,10 +117,24 @@ def download(repo: str, path: str, dest: Path, expect: int | None, retries: int 
 
 
 def main() -> int:
+    # --exclude 用来跳过镜像限速严重的大文件（例如 SLAKE/imgs.zip），
+    # 先把其余文件拉齐，大文件单独用不限时的 curl 慢慢挂；脚本本身是幂等的。
+    import argparse
+
+    parser = argparse.ArgumentParser(description="拉取测评集原始文件到 _raw/")
+    parser.add_argument(
+        "--exclude",
+        default="",
+        help="逗号分隔的子串，路径命中则跳过（例如 imgs.zip,PathVQA）",
+    )
+    args = parser.parse_args()
+    excludes = [item.strip() for item in args.exclude.split(",") if item.strip()]
+    wanted = [item for item in FILES if not any(pat in item[2] for pat in excludes)]
+
     RAW.mkdir(parents=True, exist_ok=True)
     failed = []
     by_repo: dict[str, list[tuple[str, str]]] = {}
-    for sub, repo, path in FILES:
+    for sub, repo, path in wanted:
         by_repo.setdefault(repo, []).append((sub, path))
 
     sizes: dict[str, int | None] = {}
@@ -128,7 +144,7 @@ def main() -> int:
             sizes[f"{repo}::{path}"] = tree.get(path)
         print(f"  清单 {repo}: {len(tree)} 个文件")
 
-    for sub, repo, path in FILES:
+    for sub, repo, path in wanted:
         # 保留仓库内的相对路径：MMLU、MedQA 各子集的文件名一模一样，只用文件名会互相覆盖。
         dest = RAW / sub / path
         dest.parent.mkdir(parents=True, exist_ok=True)

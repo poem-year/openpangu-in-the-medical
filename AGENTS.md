@@ -25,22 +25,26 @@
 
 | 线 | 模块 | 成果 | 状态 |
 | --- | --- | --- | --- |
-| A | 知识库与检索 | `rag_med_project/` | 检索代码跑通，但只有测试文档；接口与 B 侧契约不一致 |
-| B | 智能体与提示词 | `agent/`、`tests/` | 一期代码完成，83 项离线测试全绿；未接真实模型 |
-| C | 模型服务与评测 | `scripts/`、`正式测评集/`、`eval/` | 模型已在本机跑通；评测脚本就绪，但只评裸模型（L0） |
+| A | 知识库与检索 | `kb/`（旧版 `rag_med_project/` 只作对照） | 语料已入库：125 份 md / 84,359 块；索引已建；接口与 B 侧契约一致 |
+| B | 智能体与提示词 | `agent/`、`tests/` | 一期代码完成，214 项离线测试全绿；已接真实模型（走 C 的 OpenAI 兼容服务） |
+| C | 模型服务与评测 | `scripts/`、`正式测评集/`、`eval/` | 模型与服务已跑通；L0 基线（332 题 / 13 维）已出报告 |
 
-**最大断点：B 线的 `ChatOpenAI` 连不上本机模型**（没有 OpenAI 兼容 HTTP 服务），
-所以 `python -m agent.cli` 现在必然失败。详见 `环境说明.md` §五。
+**最大断点：RAG 层的输出截断**——加入【参考资料】后慢思考会重复打转、跑满输出预算，
+L2 有 168/312 题被截断（L0 只有 7 题），分数因此不可解释。修法与现状见
+`L2L3检索层评测报告.md` §四。L1 / L4 / L5 也还没接（`eval/` 从不调用 `agent.answer()`）。
 
 ## 四、工作约定
 
-1. 动 `agent/` 或 `tests/` 之后必须 `.venv/bin/python -m pytest -q` 全绿（当前 83 项，约 0.6 秒跑完），不绿不算完成。
+1. 动 `agent/`、`kb/`、`eval/` 或 `tests/` 之后必须 `.venv/bin/python -m pytest -q` 全绿（当前 214 项，约 4 秒跑完），不绿不算完成。
 2. 动 `agent/prompts/` 下任何文件：先更新 `agent/prompts/CHANGELOG.md`，再跑 `tests/test_scenarios_fake_model.py` 回归。
 3. 改接口先改 `智能体接口规范.md`，按其中 §6 记录变更；字段与枚举「只增不改」。
 4. 与用户对话、写文档、写注释一律用中文；文档风格照 `项目综述.md`：短句、表格、少形容词。
 5. 数据来源要注明：测评集出自 CMExam / CMB-Clin（Apache-2.0）与 IMCS-V2（MIT）。
 6. DeepSeek API Key 在 `~/.codex/config.toml` 里，不要复制进项目文件、不要提交、不要在日志里打印。
 7. `git commit` 之前先问用户。
+8. 大目录不要进 git：`kb/corpus_raw/`（647MB 原始采集件）、`kb/corpus/`、`kb/index/`、
+   `正式测评集/_raw/`、`eval/runs/` 都已在 `.gitignore` 里。用 `sync.sh` 推之前先
+   `git add -A --dry-run` 看一眼，别把语料和评测结果推上公开仓库。
 
 ## 五、这台机器
 

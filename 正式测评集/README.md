@@ -214,11 +214,12 @@ coding 榜会把能力拆成终端操作、前端、后端、软件工程、agen
 
 ### 已下载但未采用的来源
 
-`_raw/` 里还留着几份下载了但没进正式题库的材料，留着是为了后续加题时不用重新下载：
+`_raw/` 里还留着几份下载了但没进正式题库的**文本类**材料，留着是为了后续加题时不用重新下载
+（当前 `_raw/` 共 177MB，28 个文件，`build.py` 引用的路径一个不缺）：
 
 | 来源 | 为什么没用 |
 | --- | --- |
-| VQA-RAD、PathVQA、SLAKE | 多模态读片维度，本版按需求移除 |
+| VQA-RAD、PathVQA、SLAKE | 多模态读片维度，本版按需求移除；**原始件已删**（252MB，纯图片用不上），要做多模态时 `python3 download.py` 可原样拉回 |
 | CMB-test（11200 题） | 官方测试集不公开答案，无法判分 |
 | HealthBench hard（1000 题） | 与已用的 oss_eval 同源，本轮只用一份避免重复，后续可作独立难例子集 |
 | MedXpertQA Text/dev、MM | 只用 test 的 Diagnosis 子集；多模态部分未纳入 |
@@ -231,6 +232,8 @@ coding 榜会把能力拆成终端操作、前端、后端、软件工程、agen
 ```bash
 cd _build
 python3 download.py    # 从 HuggingFace 镜像拉原始数据到 _raw/（可重复运行，已下载会跳过）
+# 只补文本类、不拉多模态图片（252MB）：
+python3 download.py --exclude "SLAKE,VQARAD,PathVQA"
 python3 build.py       # 抽取、抽样、中文化、统一格式，产出 13 个 jsonl 与 manifest.json
 python3 verify.py      # 校验结构、答案、id 唯一性，并打印来源分布
 ```

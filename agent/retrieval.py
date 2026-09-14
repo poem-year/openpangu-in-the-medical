@@ -1,8 +1,11 @@
 """检索接口（A 侧实现落点）与智能体侧检索工具。
 
-替换方式（见《智能体接口规范.md》§2.1）：
-    把 retrieve() 的函数体替换为真实实现，保持同名、同签名、同返回类型；
-    智能体侧与提示词无需任何改动。
+分两层（见《智能体接口规范.md》§2.1）：
+    - `retrieve()`：本文件是**适配层**，把 `kb.search` 的结果映射成 `Evidence`；
+      检索实现、建库、索引都在 `kb/` 包里，这里不写检索逻辑。
+    - `retrieve_evidence()`：模型可见的工具，负责降级话术与 chunk_id 上报，保持不变。
+
+注意：`kb` 是惰性导入的——CLI 启动、单元测试都不该因为加载嵌入模型而变慢。
 """
 
 from __future__ import annotations
@@ -14,16 +17,40 @@ from agent.schemas import Evidence
 
 
 def retrieve(query: str, k: int = 5) -> list[Evidence]:
-    """检索知识库，返回若干证据片段（A 侧实现落点，当前为 mock）。
+    """检索知识库，返回若干证据片段。
 
     契约（《智能体接口规范.md》§2）：
     - 正常：返回 ≤k 条，按 score 降序；
     - 无结果：返回空列表 []（不要返回占位/编造证据）；
     - 异常：直接抛出异常，由工具包装层捕获并降级；
     - chunk_id 全局唯一、稳定，绝不编造。
+
+    实现落在 `kb/search.py`；索引缺失时抛 `KbIndexMissingError`。
     """
-    # TODO(A): 替换为真实检索实现（保持签名与返回类型不变）。
-    return []
+    if not isinstance(query, str) or not query.strip():
+        raise ValueError("query 不能为空")
+
+    from kb.config import get_config
+    from kb.search import retrieve as kb_retrieve
+
+    config = get_config()
+    try:
+        top_k = int(k)
+    except (TypeError, ValueError):
+        top_k = config.top_k
+    if top_k < 1:
+        top_k = config.top_k
+    chunks = kb_retrieve(query, k=top_k, config=config)
+    return [
+        Evidence(
+            chunk_id=chunk.chunk_id,
+            text=chunk.text,
+            source=chunk.source,
+            section=chunk.section,
+            score=chunk.score,
+        )
+        for chunk in chunks
+    ]
 
 
 def retrieve_evidence(query: str, k: int = 5) -> str:

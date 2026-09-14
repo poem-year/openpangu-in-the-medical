@@ -1,0 +1,1383 @@
+# 语料登记表（由 kb/corpus_raw/_scripts/convert.py 生成，请勿手改）
+#
+# 字段：file / doc_id / name / version / category / source_type / url / note
+#       license（许可） / language（zh|en） / tier（1 指南规范、2 权威知识、3 科普问答）
+#
+# 重新生成：.venv/bin/python kb/corpus_raw/_scripts/convert.py
+
+files:
+  - file: encyclopedia/baike_00.md
+    doc_id: baike-00
+    name: "中文医学百科问答（第1卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_01.md
+    doc_id: baike-01
+    name: "中文医学百科问答（第2卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_02.md
+    doc_id: baike-02
+    name: "中文医学百科问答（第3卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_03.md
+    doc_id: baike-03
+    name: "中文医学百科问答（第4卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_04.md
+    doc_id: baike-04
+    name: "中文医学百科问答（第5卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_05.md
+    doc_id: baike-05
+    name: "中文医学百科问答（第6卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_06.md
+    doc_id: baike-06
+    name: "中文医学百科问答（第7卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_07.md
+    doc_id: baike-07
+    name: "中文医学百科问答（第8卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_08.md
+    doc_id: baike-08
+    name: "中文医学百科问答（第9卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_09.md
+    doc_id: baike-09
+    name: "中文医学百科问答（第10卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_10.md
+    doc_id: baike-10
+    name: "中文医学百科问答（第11卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_11.md
+    doc_id: baike-11
+    name: "中文医学百科问答（第12卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_12.md
+    doc_id: baike-12
+    name: "中文医学百科问答（第13卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_13.md
+    doc_id: baike-13
+    name: "中文医学百科问答（第14卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_14.md
+    doc_id: baike-14
+    name: "中文医学百科问答（第15卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_15.md
+    doc_id: baike-15
+    name: "中文医学百科问答（第16卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_16.md
+    doc_id: baike-16
+    name: "中文医学百科问答（第17卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_17.md
+    doc_id: baike-17
+    name: "中文医学百科问答（第18卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_18.md
+    doc_id: baike-18
+    name: "中文医学百科问答（第19卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_19.md
+    doc_id: baike-19
+    name: "中文医学百科问答（第20卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_20.md
+    doc_id: baike-20
+    name: "中文医学百科问答（第21卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_21.md
+    doc_id: baike-21
+    name: "中文医学百科问答（第22卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_22.md
+    doc_id: baike-22
+    name: "中文医学百科问答（第23卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_23.md
+    doc_id: baike-23
+    name: "中文医学百科问答（第24卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_24.md
+    doc_id: baike-24
+    name: "中文医学百科问答（第25卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_25.md
+    doc_id: baike-25
+    name: "中文医学百科问答（第26卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_26.md
+    doc_id: baike-26
+    name: "中文医学百科问答（第27卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_27.md
+    doc_id: baike-27
+    name: "中文医学百科问答（第28卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_28.md
+    doc_id: baike-28
+    name: "中文医学百科问答（第29卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_29.md
+    doc_id: baike-29
+    name: "中文医学百科问答（第30卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_30.md
+    doc_id: baike-30
+    name: "中文医学百科问答（第31卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_31.md
+    doc_id: baike-31
+    name: "中文医学百科问答（第32卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_32.md
+    doc_id: baike-32
+    name: "中文医学百科问答（第33卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_33.md
+    doc_id: baike-33
+    name: "中文医学百科问答（第34卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_34.md
+    doc_id: baike-34
+    name: "中文医学百科问答（第35卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_35.md
+    doc_id: baike-35
+    name: "中文医学百科问答（第36卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_36.md
+    doc_id: baike-36
+    name: "中文医学百科问答（第37卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_37.md
+    doc_id: baike-37
+    name: "中文医学百科问答（第38卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_38.md
+    doc_id: baike-38
+    name: "中文医学百科问答（第39卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_39.md
+    doc_id: baike-39
+    name: "中文医学百科问答（第40卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_40.md
+    doc_id: baike-40
+    name: "中文医学百科问答（第41卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_41.md
+    doc_id: baike-41
+    name: "中文医学百科问答（第42卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_42.md
+    doc_id: baike-42
+    name: "中文医学百科问答（第43卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_43.md
+    doc_id: baike-43
+    name: "中文医学百科问答（第44卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_44.md
+    doc_id: baike-44
+    name: "中文医学百科问答（第45卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_45.md
+    doc_id: baike-45
+    name: "中文医学百科问答（第46卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_46.md
+    doc_id: baike-46
+    name: "中文医学百科问答（第47卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: encyclopedia/baike_47.md
+    doc_id: baike-47
+    name: "中文医学百科问答（第48卷）"
+    version: "2026-09 筛选"
+    category: "医学百科"
+    source_type: "百科/问答（科普级）"
+    url: "https://huggingface.co/datasets/shibing624/medical"
+    note: "来源 shibing624/medical（Apache-2.0），医学关键词筛选 + 去重"
+    license: "Apache-2.0"
+    language: zh
+    tier: 3
+  - file: guidelines_cn/gov_cn/中华人民共和国药品管理法实施条例_474d08c8.md
+    doc_id: gov-474d08c8
+    name: "中华人民共和国药品管理法实施条例"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/中国人民解放军实施_中华人民共和国药品管理法_办法_807f9136.md
+    doc_id: gov-807f9136
+    name: "中国人民解放军实施《中华人民共和国药品管理法》办法"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/产前筛查各类专业人员考核内容_89ec57c6.md
+    doc_id: gov-89ec57c6
+    name: "产前筛查各类专业人员考核内容"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/产前筛查各类专业的人员能力_2becea56.md
+    doc_id: gov-2becea56
+    name: "产前筛查各类专业的人员能力"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/产前筛查机构基本条件_c877eafd.md
+    doc_id: gov-c877eafd
+    name: "产前筛查机构基本条件"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于全面推进分娩镇痛工作的通知_22570a12.md
+    doc_id: gov-22570a12
+    name: "关于全面推进分娩镇痛工作的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于加强基层慢性病健康管理服务的指导意见_17535755.md
+    doc_id: gov-17535755
+    name: "关于加强基层慢性病健康管理服务的指导意见"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于加强首诊和转诊服务_提升医疗服务连续性的通知_7ac6c14e.md
+    doc_id: gov-7ac6c14e
+    name: "关于加强首诊和转诊服务 提升医疗服务连续性的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于加快推进县级中医医院高质量发展的意见_fc4ddf35.md
+    doc_id: gov-fc4ddf35
+    name: "关于加快推进县级中医医院高质量发展的意见"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于印发_中医药振兴发展_十五五_规划_的通知_a35c2bd8.md
+    doc_id: gov-a35c2bd8
+    name: "关于印发《中医药振兴发展“十五五”规划》的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于印发_职业病分类和目录_的通知_d41a6620.md
+    doc_id: gov-d41a6620
+    name: "关于印发《职业病分类和目录》的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于印发乡镇卫生院_社区卫生服务中心中医药服务管理基本规范的通知_7d16d928.md
+    doc_id: gov-7d16d928
+    name: "关于印发乡镇卫生院 社区卫生服务中心中医药服务管理基本规范的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于印发医疗卫生强基工程中医药行动方案的通知_82ac967f.md
+    doc_id: gov-82ac967f
+    name: "关于印发医疗卫生强基工程中医药行动方案的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于印发家庭病床服务指南_试行_的通知_769fe41c.md
+    doc_id: gov-769fe41c
+    name: "关于印发家庭病床服务指南（试行）的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于印发新冠肺炎出院患者主要功能障碍康复治疗方案的通知_6b0979ab.md
+    doc_id: gov-6b0979ab
+    name: "关于印发新冠肺炎出院患者主要功能障碍康复治疗方案的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于印发老年护理服务能力提升行动方案的通知_3c617d63.md
+    doc_id: gov-3c617d63
+    name: "关于印发老年护理服务能力提升行动方案的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于开展_儿科和精神卫生服务年_行动_2025_2027年_的通知_d09fd849.md
+    doc_id: gov-d09fd849
+    name: "关于开展“儿科和精神卫生服务年”行动（2025-2027年）的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于开展医养结合促进行动的通知_b9f937cd.md
+    doc_id: gov-b9f937cd
+    name: "关于开展医养结合促进行动的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于开展改善就医感受提升患者体验主题活动的通知_317f52c5.md
+    doc_id: gov-317f52c5
+    name: "关于开展改善就医感受提升患者体验主题活动的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于开展银发医养行动的通知_fdc204af.md
+    doc_id: gov-fdc204af
+    name: "关于开展银发医养行动的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/关于进一步发挥村_居_民委员会公共卫生委员会作用的指导意见_6c1b7668.md
+    doc_id: gov-6c1b7668
+    name: "关于进一步发挥村（居）民委员会公共卫生委员会作用的指导意见"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院关于_疾病预防控制_十五五_规划_的批复_a56d30f2.md
+    doc_id: gov-a56d30f2
+    name: "国务院关于《疾病预防控制“十五五”规划》的批复"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院办公厅关于全面深化药品医疗器械监管改革促进医药产业高质量发展的意见_40e67d6e.md
+    doc_id: gov-40e67d6e
+    name: "国务院办公厅关于全面深化药品医疗器械监管改革促进医药产业高质量发展的意见"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院办公厅关于印发_中国遏制与防治艾滋病规划_2024_2030年_的通知_841dc85e.md
+    doc_id: gov-841dc85e
+    name: "国务院办公厅关于印发《中国遏制与防治艾滋病规划（2024—2030年）》的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院办公厅关于印发_十四五_中医药发展规划的通知_ff1e094f.md
+    doc_id: gov-ff1e094f
+    name: "国务院办公厅关于印发“十四五”中医药发展规划的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院办公厅关于印发中医药振兴发展重大工程实施方案的通知_4812b892.md
+    doc_id: gov-4812b892
+    name: "国务院办公厅关于印发中医药振兴发展重大工程实施方案的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院办公厅关于印发中国防治慢性病中长期规划_2017_2025年_的通知_e6158c11.md
+    doc_id: gov-e6158c11
+    name: "国务院办公厅关于印发中国防治慢性病中长期规划（2017—2025年）的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院办公厅关于印发国家残疾预防行动计划_2021_2025年_的通知_13918621.md
+    doc_id: gov-13918621
+    name: "国务院办公厅关于印发国家残疾预防行动计划（2021—2025年）的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院办公厅关于印发国民营养计划_2017_2030年_的通知_f4f37b58.md
+    doc_id: gov-f4f37b58
+    name: "国务院办公厅关于印发国民营养计划（2017—2030年）的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院办公厅关于完善国家基本药物制度的意见_27cdbb48.md
+    doc_id: gov-27cdbb48
+    name: "国务院办公厅关于完善国家基本药物制度的意见"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院办公厅关于推动疾病预防控制事业高质量发展的指导意见_55e2bc60.md
+    doc_id: gov-55e2bc60
+    name: "国务院办公厅关于推动疾病预防控制事业高质量发展的指导意见"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院办公厅关于提升中药质量促进中医药产业高质量发展的意见_4f355b3a.md
+    doc_id: gov-4f355b3a
+    name: "国务院办公厅关于提升中药质量促进中医药产业高质量发展的意见"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院办公厅印发_关于加快建设分级诊疗体系的若干措施_的通知_17399d4b.md
+    doc_id: gov-17399d4b
+    name: "国务院办公厅印发《关于加快建设分级诊疗体系的若干措施》的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国务院应对新型冠状病毒感染疫情联防联控机制_中央农村工作领导小组关于印发加强当前_fd4972f3.md
+    doc_id: gov-fd4972f3
+    name: "国务院应对新型冠状病毒感染疫情联防联控机制 中央农村工作领导小组关于印发加强当前农村地区新型冠状病毒感染疫情防控工作方案的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国家中医药局_国家卫生健康委关于印发_医院中药饮片管理规范_2026版_的通知_ccd8bce3.md
+    doc_id: gov-ccd8bce3
+    name: "国家中医药局 国家卫生健康委关于印发《医院中药饮片管理规范（2026版）》的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国家中医药局_国家卫生健康委关于学习推广三明医改促进中医药传承创新发展经验做法的_0ebc68f3.md
+    doc_id: gov-0ebc68f3
+    name: "国家中医药局 国家卫生健康委关于学习推广三明医改促进中医药传承创新发展经验做法的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国家中医药管理局关于印发_中医医院信息与数字化建设规范_2024版_的通知_83bca1d7.md
+    doc_id: gov-83bca1d7
+    name: "国家中医药管理局关于印发《中医医院信息与数字化建设规范（2024版）》的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国家卫生健康委_国家中医药管理局_国家疾病预防控制局关于进一步做好公立医疗卫生机_870d11aa.md
+    doc_id: gov-870d11aa
+    name: "国家卫生健康委 国家中医药管理局 国家疾病预防控制局关于进一步做好公立医疗卫生机构医用设备集中采购工作的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国家卫生健康委办公厅关于印发老年医学科建设与管理指南_2025年版_的通知_cc9ff8e0.md
+    doc_id: gov-cc9ff8e0
+    name: "国家卫生健康委办公厅关于印发老年医学科建设与管理指南（2025年版）的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国家卫生健康委办公厅关于印发职业病医院基本标准_二级_三级_的通知_a7b469f5.md
+    doc_id: gov-a7b469f5
+    name: "国家卫生健康委办公厅关于印发职业病医院基本标准（二级、三级）的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国家卫生健康委办公厅关于提升老年医学医疗服务能力的通知_15a1f8fd.md
+    doc_id: gov-15a1f8fd
+    name: "国家卫生健康委办公厅关于提升老年医学医疗服务能力的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/国家卫生健康委办公厅关于进一步加强产前筛查服务管理的通知_53269024.md
+    doc_id: gov-53269024
+    name: "国家卫生健康委办公厅关于进一步加强产前筛查服务管理的通知"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/生育友好医院建设指南建设维度_建设内容理念机制友好符合_开展助产技术医疗机构基本_c700a57f.md
+    doc_id: gov-c700a57f
+    name: "生育友好医院建设指南建设维度 建设内容理念机制友好符合《开展助产技术医疗机构基本标准》，足额配备产科医护人员和设施设备，确保服务资源与服务量相匹配（★）。"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/血清学产前筛查知情同意书参考要点血清学产前筛查是通过检测孕妇血清中的生化标志物的_604a8cb6.md
+    doc_id: gov-604a8cb6
+    name: "血清学产前筛查知情同意书参考要点血清学产前筛查是通过检测孕妇血清中的生化标志物的水平，结合孕妇年龄、检测孕周、体重等因素，使用专门的风险计算软件来分析计算胎儿罹"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/超声产前筛查知情同意书参考要点_cec3dc5c.md
+    doc_id: gov-cec3dc5c
+    name: "超声产前筛查知情同意书参考要点"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/附件1门诊及收治住院基本病种一_基本病种_128种_序号_病种_ICD代码_187e4108.md
+    doc_id: gov-187e4108
+    name: "附件1门诊及收治住院基本病种一、基本病种（128种）序号 | 病种 | ICD代码"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: guidelines_cn/gov_cn/附件2中医医疗技术目录技术类别_技术名称_ffe9e7ed.md
+    doc_id: gov-ffe9e7ed
+    name: "附件2中医医疗技术目录技术类别 | 技术名称"
+    version: "2026-09 采集"
+    category: "国家政策文件"
+    source_type: "政府文件"
+    url: ""
+    note: "来源：中国政府网文件库，正文由 html/docx/pdf 转换"
+    license: "政府文件（可公开，注明来源与文号）"
+    language: zh
+    tier: 1
+  - file: literature_oa/europepmc/2023_European_Thyroid_Association_Clinic_49828fb4.md
+    doc_id: pmc-49828fb4
+    name: "2023 European Thyroid Association Clinical Practice Guidelines for thyroid nodule management"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：This work is licensed under a Creative Commons Attribution 4.0 International License."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Burden_of_disease_scenarios_for_204_coun_7af74ab6.md
+    doc_id: pmc-7af74ab6
+    name: "Burden of disease scenarios for 204 countries and territories, 2022–2050: a forecasting analysis for the Global Burden of Disease Study 2021"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：This is an open access article under the CC BY license (http://creativecommons.org/licenses/by/4.0/)."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Cancer_chemotherapy_and_beyond_Current_s_74bdbde4.md
+    doc_id: pmc-74bdbde4
+    name: "Cancer chemotherapy and beyond: Current status, drug candidates, associated risks and progress in targeted therapeutics"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：This is an open access article under the CC BY license (http://creativecommons.org/licenses/by/4.0/)."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/China_stroke_surveillance_report_2021_fcf4a4f1.md
+    doc_id: pmc-fcf4a4f1
+    name: "China stroke surveillance report 2021"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：https://creativecommons.org/licenses/by/4.0/Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article's Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article's Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/. The Creative Commons Public Domain Dedication waiver (http://creativecommons.org/publicdomain/zero/1.0/) applies to the data made available in this article, unless otherwise stated in a credit line to the data."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Effect_of_High_vs_Low_Doses_of_Chloroqui_3a4a0b8d.md
+    doc_id: pmc-3a4a0b8d
+    name: "Effect of High vs Low Doses of Chloroquine Diphosphate as Adjunctive Therapy for Patients Hospitalized With Severe Acute Respiratory Syndrome Coronavirus 2 (SARS-CoV-2) Infection"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：This is an open access article distributed under the terms of the CC-BY License."
+    license: "CC BY"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/European_Consensus_Guidelines_on_the_Man_5254a250.md
+    doc_id: pmc-5254a250
+    name: "European Consensus Guidelines on the Management of Respiratory Distress Syndrome: 2022 Update"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：This article is licensed under the Creative Commons Attribution 4.0 International License (CC BY). Usage, derivative works and distribution are permitted provided that proper credit is given to the author and the original publisher."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Extracellular_vesicles_as_tools_and_targ_68b1cba5.md
+    doc_id: pmc-68b1cba5
+    name: "Extracellular vesicles as tools and targets in therapy for diseases"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Genetic_drivers_of_heterogeneity_in_type_ef798b80.md
+    doc_id: pmc-ef798b80
+    name: "Genetic drivers of heterogeneity in type 2 diabetes pathophysiology"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Global_incidence_prevalence_years_lived_204e1fa0.md
+    doc_id: pmc-204e1fa0
+    name: "Global incidence, prevalence, years lived with disability (YLDs), disability-adjusted life-years (DALYs), and healthy life expectancy (HALE) for 371 diseases and injuries in 204 countries and territories and 811 subnational locations, 1990–2021: a systematic analysis for the Global Burden of Disease Study 2021"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：https://creativecommons.org/licenses/by/4.0/This is an open access article under the CC BY license (http://creativecommons.org/licenses/by/4.0/)."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Global_regional_and_national_burden_of_d_c015e845.md
+    doc_id: pmc-c015e845
+    name: "Global, regional, and national burden of diabetes from 1990 to 2021, with projections of prevalence to 2050: a systematic analysis for the Global Burden of Disease Study 2021"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：This is an open access article under the CC BY license (http://creativecommons.org/licenses/by/4.0/)."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Global_regional_and_national_burden_of_d_ce4b1dd7.md
+    doc_id: pmc-ce4b1dd7
+    name: "Global, regional, and national burden of disorders affecting the nervous system, 1990–2021: a systematic analysis for the Global Burden of Disease Study 2021"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：This is an open access article under the CC BY license (http://creativecommons.org/licenses/by/3.0/)."
+    license: "CC BY"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Global_regional_and_national_prevalence_ea62dfca.md
+    doc_id: pmc-ea62dfca
+    name: "Global, regional, and national prevalence and mortality burden of sickle cell disease, 2000–2021: a systematic analysis from the Global Burden of Disease Study 2021"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：https://creativecommons.org/licenses/by/4.0/This is an open access article under the CC BY license (http://creativecommons.org/licenses/by/4.0/)."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Going_circular_history_present_and_futur_cdc40fb3.md
+    doc_id: pmc-cdc40fb3
+    name: "Going circular: history, present, and future of circRNAs in cancer"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Gut_microbiota_intestinal_permeability_a_d41df892.md
+    doc_id: pmc-d41df892
+    name: "Gut microbiota, intestinal permeability, and systemic inflammation: a narrative review"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article's Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article's Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Immunotherapy_in_hematologic_malignancie_741cee03.md
+    doc_id: pmc-741cee03
+    name: "Immunotherapy in hematologic malignancies: achievements, challenges and future prospects"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Inflammation_and_aging_signaling_pathway_6a9134bc.md
+    doc_id: pmc-6a9134bc
+    name: "Inflammation and aging: signaling pathways and intervention therapies"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：https://creativecommons.org/licenses/by/4.0/Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Interleukin_6_at_the_interface_of_human_ab22b031.md
+    doc_id: pmc-ab22b031
+    name: "Interleukin 6: at the interface of human health and disease"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY). The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+    license: "CC BY"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Ischemia_reperfusion_injury_molecular_me_cb9f58b7.md
+    doc_id: pmc-cb9f58b7
+    name: "Ischemia-reperfusion injury: molecular mechanisms and therapeutic targets"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Large_language_models_encode_clinical_kn_fe1ec533.md
+    doc_id: pmc-fe1ec533
+    name: "Large language models encode clinical knowledge"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：https://creativecommons.org/licenses/by/4.0/Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Macrophages_in_immunoregulation_and_ther_824892a8.md
+    doc_id: pmc-824892a8
+    name: "Macrophages in immunoregulation and therapeutics"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Minimal_information_for_studies_of_extra_0e5fa0f0.md
+    doc_id: pmc-0e5fa0f0
+    name: "Minimal information for studies of extracellular vesicles (MISEV2023): From basic to advanced approaches"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：This is an open access article under the terms of the http://creativecommons.org/licenses/by/4.0/ License, which permits use, distribution and reproduction in any medium, provided the original work is properly cited."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/NF_κB_in_biology_and_targeted_therapy_ne_eb2e2324.md
+    doc_id: pmc-eb2e2324
+    name: "NF-κB in biology and targeted therapy: new insights and translational implications"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：https://creativecommons.org/licenses/by/4.0/Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Reactive_oxygen_species_toxicity_oxidati_6ee7051e.md
+    doc_id: pmc-6ee7051e
+    name: "Reactive oxygen species, toxicity, oxidative stress, and antioxidants: chronic diseases and aging"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article's Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article's Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Revolutionizing_healthcare_the_role_of_a_dcb19b02.md
+    doc_id: pmc-dcb19b02
+    name: "Revolutionizing healthcare: the role of artificial intelligence in clinical practice"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/. The Creative Commons Public Domain Dedication waiver (http://creativecommons.org/publicdomain/zero/1.0/) applies to the data made available in this article, unless otherwise stated in a credit line to the data."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Role_of_oxidative_stress_in_female_repro_43819511.md
+    doc_id: pmc-43819511
+    name: "Role of oxidative stress in female reproduction"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited."
+    license: "CC BY"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Small_molecule_metabolites_discovery_of_ca5636bc.md
+    doc_id: pmc-ca5636bc
+    name: "Small molecule metabolites: discovery of biomarkers and therapeutic targets"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：https://creativecommons.org/licenses/by/4.0/Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/TRIPOD_AI_statement_updated_guidance_for_accc6bac.md
+    doc_id: pmc-accc6bac
+    name: "TRIPOD+AI statement: updated guidance for reporting clinical prediction models that use regression or machine learning methods"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：This is an Open Access article distributed in accordance with the terms of the Creative Commons Attribution (CC BY 4.0) license, which permits others to distribute, remix, adapt and build upon this work, for commercial use, provided the original work is properly cited. See: http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Targeting_the_RAS_RAF_MAPK_pathway_for_c_17512b3f.md
+    doc_id: pmc-17512b3f
+    name: "Targeting the RAS/RAF/MAPK pathway for cancer therapy: from mechanism to clinical studies"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：https://creativecommons.org/licenses/by/4.0/Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/The_blood_brain_barrier_Structure_regula_4789289e.md
+    doc_id: pmc-4789289e
+    name: "The blood–brain barrier: Structure, regulation and drug delivery"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：https://creativecommons.org/licenses/by/4.0/Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2
+  - file: literature_oa/europepmc/Update_on_the_diagnosis_and_treatment_of_e51c3c43.md
+    doc_id: pmc-e51c3c43
+    name: "Update on the diagnosis and treatment of neuromyelits optica spectrum disorders (NMOSD) – revised recommendations of the Neuromyelitis Optica Study Group (NEMOS). Part I: Diagnosis and differential diagnosis"
+    version: "2026-09 采集"
+    category: "开放获取文献"
+    source_type: "期刊全文（Europe PMC）"
+    url: ""
+    note: "Europe PMC 开放获取全文；许可：https://creativecommons.org/licenses/by/4.0/Open AccessThis article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article's Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article's Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/."
+    license: "CC BY 4.0"
+    language: en
+    tier: 2

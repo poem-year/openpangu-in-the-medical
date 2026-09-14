@@ -165,12 +165,19 @@ class TestPrescan:
 
 
 class TestRetrievalStub:
-    """retrieval：mock 存根行为与异常降级契约。"""
+    """retrieval：适配层契约与降级语义（完整用例见 tests/test_agent_retrieval_adapter.py）。"""
 
-    def test_mock_returns_empty_list(self):
-        assert retrieval_module.retrieve("任何查询") == []
+    def test_missing_index_raises_instead_of_fake_empty(self, tmp_path, monkeypatch):
+        """索引不存在时必须抛错（工具层降级为「不可用」），不能假装「查不到资料」。"""
+        from kb.search import KbIndexMissingError, clear_cache
 
-    def test_empty_result_message(self):
+        monkeypatch.setenv("KB_INDEX_DIR", str(tmp_path / "不存在"))
+        clear_cache()
+        with pytest.raises(KbIndexMissingError):
+            retrieval_module.retrieve("任何查询")
+
+    def test_empty_result_message(self, monkeypatch):
+        monkeypatch.setattr(retrieval_module, "retrieve", lambda query, k=5: [])
         result = retrieve_evidence("咳嗽持续的原因", 3)
         assert "未找到" in result
         assert "不要编造" in result

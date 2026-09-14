@@ -12,6 +12,8 @@
 #   bash run_eval.sh --no-judge      # 不调 AI，只出规则判分
 #   bash run_eval.sh --estimate      # 只看范围与预估耗时
 #   bash run_eval.sh --batch 16      # 改批大小
+#   bash run_eval.sh --layer L2      # 纯向量检索（知识库基线），先自动跑预检索
+#   bash run_eval.sh --layer L3      # 混合检索 + 标定阈值
 #
 # 中断了直接重跑同一条命令：已完成的题会按配置指纹跳过。
 
@@ -21,6 +23,7 @@ PROJECT_DIR="/data/openpangu"
 DATASET_DIR="${PROJECT_DIR}/正式测评集"
 PY="${PROJECT_DIR}/.venv-pangu/bin/python"
 BATCH=32
+LAYER=L0
 QUICK=0
 NO_JUDGE=0
 ESTIMATE_ONLY=0
@@ -42,6 +45,7 @@ while [[ $# -gt 0 ]]; do
     --no-judge)   NO_JUDGE=1; shift ;;
     --estimate)   ESTIMATE_ONLY=1; shift ;;
     --batch)      BATCH="$2"; shift 2 ;;
+    --layer)      LAYER="$2"; shift 2 ;;
     --run-id)     USER_RUN_ID="$2"; shift 2 ;;
     --workers)    JUDGE_WORKERS="$2"; shift 2 ;;
     -h|--help)    usage; exit 0 ;;
@@ -65,7 +69,7 @@ for mode in "${MODES[@]}"; do
   if [[ -n "${USER_RUN_ID}" ]]; then
     if [[ ${#MODES[@]} -eq 1 ]]; then RUN_IDS+=("${USER_RUN_ID}"); else RUN_IDS+=("${USER_RUN_ID}-${mode}"); fi
   else
-    RUN_IDS+=("L0-${mode}-b${BATCH}")
+    RUN_IDS+=("${LAYER}-${mode}-b${BATCH}")
   fi
 done
 
@@ -145,7 +149,7 @@ for idx in "${!MODES[@]}"; do
   mode="${MODES[$idx]}"
   rid="${RUN_IDS[$idx]}"
   run_dir="${PROJECT_DIR}/eval/runs/${rid}"
-  COMMON=(--dataset-dir "${DATASET_DIR}" --run-id "${rid}" --layer L0 \
+  COMMON=(--dataset-dir "${DATASET_DIR}" --run-id "${rid}" --layer "${LAYER}" \
           --thinking "${mode}" --batch-size "${BATCH}" --per-dimension "${PER_DIM}")
 
   echo

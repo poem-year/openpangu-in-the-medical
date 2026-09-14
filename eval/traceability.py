@@ -22,22 +22,42 @@ from __future__ import annotations
 
 import re
 
-# 引用写法：chunk_id: xxx / [chunk_id: xxx] / [来源: xxx] / 裸 chunk_id（8–32 位字母数字）
+# 引用标识允许的字符集：**必须含冒号**。真实 chunk_id 形如 kb::baike-38::3badd7513c40，
+# 早期版本写成 [A-Za-z0-9_\-]{6,40}，一个 chunk_id 都匹配不到，指标被钉死在 0。
+_ID_CHARS = r"[A-Za-z0-9_\-:.]"
+
+# 引用写法：chunk_id: xxx / [chunk_id: xxx] / 裸 kb::doc::hash / 来源: xxx
 CHUNK_PATTERNS = [
-    re.compile(r"chunk[_\- ]?id\s*[:：]\s*([A-Za-z0-9_\-]{6,40})", re.I),
-    re.compile(r"\[\s*([A-Za-z0-9_\-]{6,40})\s*\]"),
-    re.compile(r"来源\s*[:：]\s*([A-Za-z0-9_\-]{6,40})"),
+    re.compile(rf"chunk[_\- ]?id\s*[:：]\s*[\[【]?\s*({_ID_CHARS}{{4,64}})", re.I),
+    re.compile(rf"(kb::{_ID_CHARS}{{1,48}}::[A-Za-z0-9_\-]+)"),
+    re.compile(rf"来源\s*[:：]\s*[\[【]?\s*({_ID_CHARS}{{4,64}})"),
 ]
 
+# 资料编号写法：[1] / 【1】——提示词把检索结果按 1..k 编号，模型常用编号代替 chunk_id
+INDEX_PATTERN = re.compile(r"[\[【]\s*(\d{1,3})\s*[\]】]")
 
-def extract_citations(answer: str) -> list[str]:
-    """从回答里抠出所有引用标识（去重保序）。"""
+_TRAILING = "。，,.;；：:）)]】"
+
+
+def extract_citations(answer: str, evidence_ids=None) -> list[str]:
+    """从回答里抠出所有引用标识（去重保序）。
+
+    evidence_ids 给了本轮检索结果的**有序** chunk_id 列表时，一并把「[1]」这类
+    资料编号翻译成对应的 chunk_id——提示词就是这么给资料编号的，模型两种写法都会用。
+    """
+    text = answer or ""
     found: list[str] = []
     for pattern in CHUNK_PATTERNS:
-        for m in pattern.finditer(answer or ""):
-            cid = m.group(1).strip()
-            if cid not in found:
+        for m in pattern.finditer(text):
+            cid = m.group(1).strip().rstrip(_TRAILING)
+            if cid and cid not in found:
                 found.append(cid)
+    if evidence_ids:
+        ids = [str(item) for item in evidence_ids]
+        for m in INDEX_PATTERN.finditer(text):
+            position = int(m.group(1))
+            if 1 <= position <= len(ids) and ids[position - 1] not in found:
+                found.append(ids[position - 1])
     return found
 
 
@@ -63,7 +83,7 @@ def traceability_rate(answers: list[dict], min_locatable: float = 1.0) -> dict:
         if not valid:
             continue
         total += 1
-        cits = extract_citations(rec.get("answer", ""))
+        cits = extract_citations(rec.get("answer", ""), evidence_ids=valid)
         rate = locatable_rate(cits, valid)
         ok_locatable = bool(rate is not None and rate >= min_locatable)
         supported = rec.get("supported_flags")

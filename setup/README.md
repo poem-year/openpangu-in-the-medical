@@ -17,7 +17,8 @@ bash setup/restore.sh --check  # 只体检，不安装
 | ② CANN 8.3.RC1 | 从华为公开镜像下载 toolkit（2.4GB）+ 910B 算子内核（2.2GB），装到 `/data/Ascend` | 下载+安装约 10–15 分钟 |
 | ③ 模型权重 | git-lfs 从 AtomGit 拉 `openPangu-R-7B-2512` 到 `/data/models`（17.6GB） | 20–60 分钟（看网速） |
 | ④ Python 环境 | 建 `.venv-pangu`，装 torch 2.7.1+cpu / torch-npu 2.7.1 / transformers 4.53.2 等 | 3–5 分钟 |
-| ⑤ 冒烟 | NPU 算力自检 + 模型加载 + 一次 32 token 生成 | 1 分钟 |
+| ⑤ 智能体环境 | 建 `.venv`，装 `requirements.txt`（LangChain 智能体 + A 线检索依赖，torch 走 CPU 轮子） | 3–5 分钟 |
+| ⑥ 冒烟 | NPU 算力自检 + 模型加载 + 一次 32 token 生成 + 智能体离线测试全绿 | 1–2 分钟 |
 
 每一步都**幂等**：已经就绪的会跳过，中断了重跑会接着来。
 
@@ -59,4 +60,8 @@ bash setup/restore.sh --check  # 只体检，不安装
 | 模型权重 | 17.6GB | `bash setup/restore.sh` |
 | CANN 8.3.RC1 | 12GB | `bash setup/restore.sh` |
 | `.venv-pangu/` | 1.3GB | `bash setup/restore.sh` |
+| `.venv/` | 约 1.7GB（含 CPU 版 torch 与句向量模型依赖） | `bash setup/restore.sh` |
+| `kb/corpus_raw/` | A 线原始采集件 647MB（单个文件 563MB，超 GitHub 100MB 上限），且是第三方许可语料 | 见 `kb/corpus_raw/README.md`：`_scripts/download.py` 重下 → `_scripts/convert.py` 转换 |
+| `kb/corpus/` | A 线入库语料 83MB（125 份 md），由原始件转换而来 | 上一步的 `convert.py` 生成（`sources.yaml` 例外，它在 git 里） |
+| `kb/index/` | A 线向量索引 478MB，由语料生成 | `python -m kb.build`（切块在 `.venv`、嵌入可用 `.venv-pangu` + NPU，见 `kb/README.md` §3.2） |
 | `eval/runs/` | 评测结果，随时可重跑 | `bash run_eval.sh --watch` |

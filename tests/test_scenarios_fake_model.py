@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 
+import agent.retrieval as retrieval_module
 from agent.agent import answer, build_agent
 from agent.config import Config
 from fake_model import (
@@ -130,8 +131,10 @@ def test_scenario_4_normal_consultation():
     assert len(model.calls) == 2
 
 
-def test_scenario_5_empty_retrieval_is_honest():
+def test_scenario_5_empty_retrieval_is_honest(monkeypatch):
     """场景 5：空检索 → 如实说明未查到资料，不编造引用。"""
+    # 离线确定性：把检索固定成「查到 0 条」，不依赖本机是否建过索引。
+    monkeypatch.setattr(retrieval_module, "retrieve", lambda query, k=5: [])
     responses = [
         tool_call("retrieve_evidence", {"query": "咳嗽 持续 原因", "k": 3}),
         structured_call(
