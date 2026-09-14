@@ -47,7 +47,8 @@ SKIP_REASONS = {
 
 # 哪些层才有「知识库引用」：引用可追溯率是知识库模块的指标，基线（L0/L1）没有引用，
 # 按约定统一记为 0，不用 D13 的材料引用去顶替。
-LAYERS_WITH_RAG = {"L2", "L3", "L5"}
+# AGENT：整条链路交给 B 线智能体（它自己决定是否检索），所以同样统计引用可追溯率。
+LAYERS_WITH_RAG = {"L2", "L3", "L5", "AGENT"}
 
 
 def layer_has_rag(layer: str | None) -> bool:

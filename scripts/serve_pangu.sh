@@ -46,6 +46,8 @@ start() {
   source "${PROJECT_DIR}/scripts/pangu_env.sh"
   cd "${PROJECT_DIR}"
   setsid nohup "${PY}" scripts/pangu_server.py --host "${HOST}" --port "${PORT}" \
+    --tool-max-tokens "${TOOL_MAX_TOKENS:-320}" \
+    --finalize-max-tokens "${FINALIZE_MAX_TOKENS:-900}" \
     >> "${LOG_FILE}" 2>&1 < /dev/null &
   echo $! > "${PID_FILE}"
   echo "启动中（PID $(cat "${PID_FILE}")），日志 ${LOG_FILE}"

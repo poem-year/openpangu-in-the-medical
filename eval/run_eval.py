@@ -607,6 +607,15 @@ def stage_score(items: list[dict], args, run_dir: str, fingerprint: str) -> dict
                 preds[rec["id"]] = rec
 
     by_id = {it["id"]: it for it in items}
+    skipped_by_fingerprint = 0
+    with open(pred_path, encoding="utf-8") as fh:
+        total_preds = sum(1 for line in fh if line.strip())
+    if total_preds and not preds:
+        raise SystemExit(
+            f"[score] predictions.jsonl 里有 {total_preds} 条预测，但没有一条的指纹等于本轮"
+            f"（{fingerprint}）——说明生成阶段用的是别的参数（如 --budget-scale / --layer）。\n"
+            "请用与生成时相同的参数跑判分，否则会得到一份「0 题」的空报告。"
+        )
     rows = []
     with open(score_path, "w", encoding="utf-8") as fh:
         for item_id, pred in preds.items():
