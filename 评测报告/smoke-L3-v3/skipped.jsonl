@@ -1,0 +1,2 @@
+{"id": "D07-0001", "dimension_code": "D07", "task_type": "agentic_history_taking", "skip_reason": "需要先实现按隐藏信息作答的模拟患者（多轮交互），L0 阶段不跑"}
+{"id": "D07-0002", "dimension_code": "D07", "task_type": "agentic_history_taking", "skip_reason": "需要先实现按隐藏信息作答的模拟患者（多轮交互），L0 阶段不跑"}

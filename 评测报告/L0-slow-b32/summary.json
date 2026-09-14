@@ -1,0 +1,281 @@
+{
+  "dimensions": {
+    "D01": {
+      "n": 40,
+      "scored": 40,
+      "correct": 27,
+      "pending": 0,
+      "truncated": 0,
+      "accuracy": 0.675,
+      "score_mean": 0.675,
+      "ci95": [
+        0.5202,
+        0.7992
+      ],
+      "by_task": {
+        "mcq_single": {
+          "n": 40,
+          "correct": 27
+        }
+      }
+    },
+    "D02": {
+      "n": 40,
+      "scored": 40,
+      "correct": 32,
+      "pending": 0,
+      "truncated": 0,
+      "accuracy": 0.8,
+      "score_mean": 0.8,
+      "ci95": [
+        0.6524,
+        0.895
+      ],
+      "by_task": {
+        "mcq_single": {
+          "n": 40,
+          "correct": 32
+        }
+      }
+    },
+    "D03": {
+      "n": 25,
+      "scored": 25,
+      "correct": 8,
+      "pending": 0,
+      "truncated": 1,
+      "accuracy": 0.32,
+      "score_mean": 0.42,
+      "ci95": [
+        0.172,
+        0.5159
+      ],
+      "by_task": {
+        "mcq_single": {
+          "n": 13,
+          "correct": 8
+        },
+        "open_ddx": {
+          "n": 7,
+          "correct": 0
+        },
+        "open_ranked_ddx": {
+          "n": 5,
+          "correct": 0
+        }
+      }
+    },
+    "D04": {
+      "n": 22,
+      "scored": 22,
+      "correct": 10,
+      "pending": 0,
+      "truncated": 1,
+      "accuracy": 0.4545,
+      "score_mean": 0.6364,
+      "ci95": [
+        0.2692,
+        0.6534
+      ],
+      "by_task": {
+        "mcq_single": {
+          "n": 10,
+          "correct": 7
+        },
+        "open_workup": {
+          "n": 12,
+          "correct": 3
+        }
+      }
+    },
+    "D05": {
+      "n": 30,
+      "scored": 30,
+      "correct": 14,
+      "pending": 0,
+      "truncated": 0,
+      "accuracy": 0.4667,
+      "score_mean": 0.6167,
+      "ci95": [
+        0.3023,
+        0.6386
+      ],
+      "by_task": {
+        "open_diagnosis": {
+          "n": 30,
+          "correct": 14
+        }
+      }
+    },
+    "D06": {
+      "n": 20,
+      "scored": 20,
+      "correct": 6,
+      "pending": 0,
+      "truncated": 0,
+      "accuracy": 0.3,
+      "score_mean": 0.4,
+      "ci95": [
+        0.1455,
+        0.519
+      ],
+      "by_task": {
+        "dialogue_diagnosis": {
+          "n": 20,
+          "correct": 6
+        }
+      }
+    },
+    "D08": {
+      "n": 25,
+      "scored": 25,
+      "correct": 6,
+      "pending": 0,
+      "truncated": 1,
+      "accuracy": 0.24,
+      "score_mean": 0.24,
+      "ci95": [
+        0.115,
+        0.4343
+      ],
+      "by_task": {
+        "mcq_single": {
+          "n": 25,
+          "correct": 6
+        }
+      }
+    },
+    "D09": {
+      "n": 25,
+      "scored": 0,
+      "correct": 0,
+      "pending": 25,
+      "truncated": 0,
+      "accuracy": null,
+      "score_mean": null,
+      "ci95": null,
+      "by_task": {
+        "rubric_scored": {
+          "n": 25,
+          "correct": 0
+        }
+      }
+    },
+    "D10": {
+      "n": 20,
+      "scored": 0,
+      "correct": 0,
+      "pending": 20,
+      "truncated": 0,
+      "accuracy": null,
+      "score_mean": null,
+      "ci95": null,
+      "by_task": {
+        "rubric_scored": {
+          "n": 20,
+          "correct": 0
+        }
+      }
+    },
+    "D11": {
+      "n": 20,
+      "scored": 0,
+      "correct": 0,
+      "pending": 20,
+      "truncated": 0,
+      "accuracy": null,
+      "score_mean": null,
+      "ci95": null,
+      "by_task": {
+        "rubric_scored": {
+          "n": 20,
+          "correct": 0
+        }
+      }
+    },
+    "D12": {
+      "n": 25,
+      "scored": 25,
+      "correct": 7,
+      "pending": 0,
+      "truncated": 2,
+      "accuracy": 0.28,
+      "score_mean": 0.28,
+      "ci95": [
+        0.1428,
+        0.4758
+      ],
+      "by_task": {
+        "calculation": {
+          "n": 25,
+          "correct": 7
+        }
+      }
+    },
+    "D13": {
+      "n": 20,
+      "scored": 20,
+      "correct": 13,
+      "pending": 0,
+      "truncated": 2,
+      "accuracy": 0.65,
+      "score_mean": 0.65,
+      "ci95": [
+        0.4329,
+        0.8188
+      ],
+      "by_task": {
+        "evidence_qa": {
+          "n": 20,
+          "correct": 13
+        }
+      }
+    }
+  },
+  "overall": {
+    "n": 312,
+    "scored": 247,
+    "correct": 123,
+    "pending": 65,
+    "truncated": 7,
+    "accuracy": 0.498,
+    "score_mean": 0.5506,
+    "ci95": [
+      0.4361,
+      0.5599
+    ]
+  },
+  "headline": {
+    "accuracy": 0.498,
+    "citation_traceability": 0.0,
+    "citation_traceability_note": "基线无知识库、无引用，按定义固定为 0",
+    "safety_compliance": 0.3846,
+    "rag_enabled": false,
+    "note": "引用可追溯率是知识库模块指标，基线固定为 0；安全合规率来自 D09–D11 的 rubric 判分；幻觉率与 D13 材料引用合规率暂不列为上报指标"
+  },
+  "rubric": {
+    "D09": {
+      "n": 25,
+      "mean_rubric_score": 0.3899,
+      "negative_hit_items": 14,
+      "negative_hit_rate": 0.56
+    },
+    "D10": {
+      "n": 20,
+      "mean_rubric_score": 0.3809,
+      "negative_hit_items": 14,
+      "negative_hit_rate": 0.7
+    },
+    "D11": {
+      "n": 20,
+      "mean_rubric_score": 0.3171,
+      "negative_hit_items": 12,
+      "negative_hit_rate": 0.6
+    }
+  },
+  "run_id": "L0-slow-b32",
+  "fingerprint": "6b927f3a6b86",
+  "layer": "L0",
+  "thinking_mode": "slow",
+  "batch_size": 32
+}

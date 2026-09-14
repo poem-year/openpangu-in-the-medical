@@ -1,0 +1,281 @@
+{
+  "dimensions": {
+    "D01": {
+      "n": 40,
+      "scored": 40,
+      "correct": 14,
+      "pending": 0,
+      "truncated": 28,
+      "accuracy": 0.35,
+      "score_mean": 0.35,
+      "ci95": [
+        0.2213,
+        0.5049
+      ],
+      "by_task": {
+        "mcq_single": {
+          "n": 40,
+          "correct": 14
+        }
+      }
+    },
+    "D02": {
+      "n": 40,
+      "scored": 40,
+      "correct": 18,
+      "pending": 0,
+      "truncated": 23,
+      "accuracy": 0.45,
+      "score_mean": 0.45,
+      "ci95": [
+        0.3071,
+        0.6017
+      ],
+      "by_task": {
+        "mcq_single": {
+          "n": 40,
+          "correct": 18
+        }
+      }
+    },
+    "D03": {
+      "n": 25,
+      "scored": 25,
+      "correct": 8,
+      "pending": 0,
+      "truncated": 14,
+      "accuracy": 0.32,
+      "score_mean": 0.36,
+      "ci95": [
+        0.172,
+        0.5159
+      ],
+      "by_task": {
+        "mcq_single": {
+          "n": 13,
+          "correct": 8
+        },
+        "open_ddx": {
+          "n": 7,
+          "correct": 0
+        },
+        "open_ranked_ddx": {
+          "n": 5,
+          "correct": 0
+        }
+      }
+    },
+    "D04": {
+      "n": 22,
+      "scored": 22,
+      "correct": 6,
+      "pending": 0,
+      "truncated": 17,
+      "accuracy": 0.2727,
+      "score_mean": 0.2955,
+      "ci95": [
+        0.1315,
+        0.4815
+      ],
+      "by_task": {
+        "mcq_single": {
+          "n": 10,
+          "correct": 4
+        },
+        "open_workup": {
+          "n": 12,
+          "correct": 2
+        }
+      }
+    },
+    "D05": {
+      "n": 30,
+      "scored": 30,
+      "correct": 12,
+      "pending": 0,
+      "truncated": 16,
+      "accuracy": 0.4,
+      "score_mean": 0.5167,
+      "ci95": [
+        0.2459,
+        0.5768
+      ],
+      "by_task": {
+        "open_diagnosis": {
+          "n": 30,
+          "correct": 12
+        }
+      }
+    },
+    "D06": {
+      "n": 20,
+      "scored": 20,
+      "correct": 8,
+      "pending": 0,
+      "truncated": 3,
+      "accuracy": 0.4,
+      "score_mean": 0.45,
+      "ci95": [
+        0.2188,
+        0.6134
+      ],
+      "by_task": {
+        "dialogue_diagnosis": {
+          "n": 20,
+          "correct": 8
+        }
+      }
+    },
+    "D08": {
+      "n": 25,
+      "scored": 25,
+      "correct": 0,
+      "pending": 0,
+      "truncated": 20,
+      "accuracy": 0.0,
+      "score_mean": 0.0,
+      "ci95": [
+        0.0,
+        0.1332
+      ],
+      "by_task": {
+        "mcq_single": {
+          "n": 25,
+          "correct": 0
+        }
+      }
+    },
+    "D09": {
+      "n": 25,
+      "scored": 0,
+      "correct": 0,
+      "pending": 25,
+      "truncated": 5,
+      "accuracy": null,
+      "score_mean": null,
+      "ci95": null,
+      "by_task": {
+        "rubric_scored": {
+          "n": 25,
+          "correct": 0
+        }
+      }
+    },
+    "D10": {
+      "n": 20,
+      "scored": 0,
+      "correct": 0,
+      "pending": 20,
+      "truncated": 3,
+      "accuracy": null,
+      "score_mean": null,
+      "ci95": null,
+      "by_task": {
+        "rubric_scored": {
+          "n": 20,
+          "correct": 0
+        }
+      }
+    },
+    "D11": {
+      "n": 20,
+      "scored": 0,
+      "correct": 0,
+      "pending": 20,
+      "truncated": 7,
+      "accuracy": null,
+      "score_mean": null,
+      "ci95": null,
+      "by_task": {
+        "rubric_scored": {
+          "n": 20,
+          "correct": 0
+        }
+      }
+    },
+    "D12": {
+      "n": 25,
+      "scored": 25,
+      "correct": 7,
+      "pending": 0,
+      "truncated": 16,
+      "accuracy": 0.28,
+      "score_mean": 0.28,
+      "ci95": [
+        0.1428,
+        0.4758
+      ],
+      "by_task": {
+        "calculation": {
+          "n": 25,
+          "correct": 7
+        }
+      }
+    },
+    "D13": {
+      "n": 20,
+      "scored": 20,
+      "correct": 12,
+      "pending": 0,
+      "truncated": 16,
+      "accuracy": 0.6,
+      "score_mean": 0.6,
+      "ci95": [
+        0.3866,
+        0.7812
+      ],
+      "by_task": {
+        "evidence_qa": {
+          "n": 20,
+          "correct": 12
+        }
+      }
+    }
+  },
+  "overall": {
+    "n": 312,
+    "scored": 247,
+    "correct": 85,
+    "pending": 65,
+    "truncated": 168,
+    "accuracy": 0.3441,
+    "score_mean": 0.3684,
+    "ci95": [
+      0.2877,
+      0.4054
+    ]
+  },
+  "headline": {
+    "accuracy": 0.3441,
+    "citation_traceability": 0.7244,
+    "citation_traceability_note": "本轮共 312 题有检索证据；上报的是「引用可定位率」（引用的 chunk_id 确实出现在本轮检索结果里的比例）；「可支撑」需 AI 判分或人工抽检，见 eval/traceability.py",
+    "safety_compliance": 0.3692,
+    "rag_enabled": true,
+    "note": "引用可追溯率是知识库模块指标，基线固定为 0；安全合规率来自 D09–D11 的 rubric 判分；幻觉率与 D13 材料引用合规率暂不列为上报指标"
+  },
+  "rubric": {
+    "D09": {
+      "n": 25,
+      "mean_rubric_score": -0.0431,
+      "negative_hit_items": 16,
+      "negative_hit_rate": 0.64
+    },
+    "D10": {
+      "n": 20,
+      "mean_rubric_score": 0.1468,
+      "negative_hit_items": 14,
+      "negative_hit_rate": 0.7
+    },
+    "D11": {
+      "n": 20,
+      "mean_rubric_score": 0.1293,
+      "negative_hit_items": 11,
+      "negative_hit_rate": 0.55
+    }
+  },
+  "run_id": "L2-slow-b32",
+  "fingerprint": "32a356bb128b",
+  "layer": "L2",
+  "thinking_mode": "slow",
+  "batch_size": 32
+}
